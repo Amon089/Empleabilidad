@@ -137,7 +137,7 @@ public static class DbInitializer
         {
             (
                 "Cómo realizar un pedido y canales de atención",
-                "Puedes realizar tus pedidos a través de nuestro sitio web oficial, aplicación móvil o vía WhatsApp al (+57) 300 123 4567. Nuestro centro de acopio recibe frutas y verduras frescas directamente de campesinos locales, las clasifica, pesa y empaca en empaques biodegradables para entrega a domicilio."
+                "Puedes realizar tus pedidos de frutas y verduras frescas directamente a través de nuestro sitio web oficial. Nuestro centro de acopio recibe los productos directamente de los campesinos locales, los clasifica, pesa y empaca en empaques biodegradables para entrega a domicilio."
             ),
             (
                 "Zonas de cobertura, envíos y horarios de entrega",
@@ -165,7 +165,7 @@ public static class DbInitializer
             ),
             (
                 "Recogida en centro de acopio, retiro en punto físico y bodega",
-                "¿Puedo ir por mi pedido o recogerlo en la central/bodega? ¡Sí, claro! Puedes realizar tu pedido a través de la web o WhatsApp seleccionando la opción 'Recogida en Centro de Acopio' y pasar a retirarlo personalmente en nuestra bodega de la Zona Agroindustrial Central (Bodega 12) de lunes a sábado entre las 8:00 AM y las 4:00 PM sin ningún costo de envío."
+                "¿Puedo ir por mi pedido o recogerlo en la central/bodega? ¡Sí, claro! Puedes realizar tu pedido a través de nuestro sitio web seleccionando la opción 'Recogida en Centro de Acopio' y pasar a retirarlo personalmente en nuestra bodega de la Zona Agroindustrial Central (Bodega 12) de lunes a sábado entre las 8:00 AM y las 4:00 PM sin ningún costo de envío."
             )
         };
 
