@@ -1,0 +1,28 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pqrs.Domain", "src\Pqrs.Domain\Pqrs.Domain.csproj", "{7A6C77C6-B320-4E87-A1FA-123456789001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pqrs.Application", "src\Pqrs.Application\Pqrs.Application.csproj", "{7A6C77C6-B320-4E87-A1FA-123456789002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pqrs.Infrastructure", "src\Pqrs.Infrastructure\Pqrs.Infrastructure.csproj", "{7A6C77C6-B320-4E87-A1FA-123456789003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pqrs.API", "src\Pqrs.API\Pqrs.API.csproj", "{7A6C77C6-B320-4E87-A1FA-123456789004}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pqrs.UnitTests", "tests\Pqrs.UnitTests\Pqrs.UnitTests.csproj", "{7A6C77C6-B320-4E87-A1FA-123456789005}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pqrs.IntegrationTests", "tests\Pqrs.IntegrationTests\Pqrs.IntegrationTests.csproj", "{7A6C77C6-B320-4E87-A1FA-123456789006}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A6C77C6-B320-4E87-A1FA-123456789004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A6C77C6-B320-4E87-A1FA-123456789004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A6C77C6-B320-4E87-A1FA-123456789004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A6C77C6-B320-4E87-A1FA-123456789004}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -13,3 +13,4 @@ C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\refint\Pqrs.Application.dll
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.pdb
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\ref\Pqrs.Application.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.sourcelink.json

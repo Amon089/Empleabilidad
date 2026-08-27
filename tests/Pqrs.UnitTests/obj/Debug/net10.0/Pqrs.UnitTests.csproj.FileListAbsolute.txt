@@ -128,3 +128,4 @@ C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.UnitTests\obj
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.UnitTests\obj\Debug\net10.0\Pqrs.UnitTests.pdb
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.UnitTests\obj\Debug\net10.0\Pqrs.UnitTests.genruntimeconfig.cache
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.UnitTests\obj\Debug\net10.0\ref\Pqrs.UnitTests.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.UnitTests\obj\Debug\net10.0\Pqrs.UnitTests.sourcelink.json

@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY ["PqrsSaaS.sln", "./"]
+COPY ["PqrsSaaS.sln*", "./"]
 COPY ["src/Pqrs.Domain/Pqrs.Domain.csproj", "src/Pqrs.Domain/"]
 COPY ["src/Pqrs.Application/Pqrs.Application.csproj", "src/Pqrs.Application/"]
 COPY ["src/Pqrs.Infrastructure/Pqrs.Infrastructure.csproj", "src/Pqrs.Infrastructure/"]

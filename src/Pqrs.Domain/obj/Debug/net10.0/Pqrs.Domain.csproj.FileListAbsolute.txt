@@ -10,3 +10,4 @@ C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debu
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\refint\Pqrs.Domain.dll
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.pdb
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\ref\Pqrs.Domain.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.sourcelink.json

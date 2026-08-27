@@ -109,7 +109,11 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 // Swagger Documentation
 builder.Services.AddEndpointsApiExplorer();
@@ -139,6 +143,7 @@ var app = builder.Build();
 
 // Configure Middleware Pipeline
 app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<DynamicCorsMiddleware>();
 
 if (app.Environment.IsDevelopment() || true)
 {
@@ -149,12 +154,14 @@ if (app.Environment.IsDevelopment() || true)
     });
 }
 
+// Enable Static Files (Serves /widget/pqrs-widget.js)
+app.UseStaticFiles();
+
 app.UseRouting();
 
 // Authentication MUST be executed before TenantResolutionMiddleware so HttpContext.User claims are available
 app.UseAuthentication();
 app.UseMiddleware<TenantResolutionMiddleware>();
-app.UseMiddleware<DynamicCorsMiddleware>();
 
 app.UseAuthorization();
 app.UseRateLimiter();

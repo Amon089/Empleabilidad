@@ -18,3 +18,4 @@ C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Infrastructure\
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Infrastructure\obj\Debug\net10.0\Pqrs.Infrastructure.pdb
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Infrastructure\obj\Debug\net10.0\Pqrs.Infrastructure.genruntimeconfig.cache
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Infrastructure\obj\Debug\net10.0\ref\Pqrs.Infrastructure.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Infrastructure\obj\Debug\net10.0\Pqrs.Infrastructure.sourcelink.json

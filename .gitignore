@@ -1,0 +1,33 @@
+## Build & Output Directories
+**/bin/
+**/obj/
+bin/
+obj/
+out/
+publish/
+
+## User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+## IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.suo
+
+## OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+[Dd]s_[Ss]tore
+
+## Environment & Secrets
+.env
+appsettings.Development.json
+appsettings.Local.json
+
+## EF Core Migrations Temporary Output
+*.log

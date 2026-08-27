@@ -24,8 +24,8 @@ public class TenantResolutionMiddleware
     {
         var path = context.Request.Path.Value?.ToLowerInvariant() ?? string.Empty;
 
-        // Skip middleware for swagger, root, healthcheck
-        if (path.StartsWith("/swagger") || path == "/" || path.StartsWith("/health") || path.StartsWith("/api/v1/hubs"))
+        // Skip middleware for OPTIONS preflight requests, swagger, root, healthcheck
+        if (HttpMethods.IsOptions(context.Request.Method) || path.StartsWith("/swagger") || path == "/" || path.StartsWith("/health") || path.StartsWith("/api/v1/hubs"))
         {
             await _next(context);
             return;

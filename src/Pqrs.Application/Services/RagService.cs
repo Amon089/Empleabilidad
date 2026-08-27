@@ -29,14 +29,45 @@ public class RagService
         string sessionId = "", 
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(query))
+        var cleanQuery = query.Trim().ToLowerInvariant();
+        var greetings = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "hola", "hola!", "holaa", "holaaa", "buenas", "buenas!", "buenos dias", "buenos días", 
+            "buenas tardes", "buenas noches", "saludos", "hey", "hi", "hello", "ayuda", "que puedes hacer"
+        };
+
+        if (greetings.Contains(cleanQuery) || cleanQuery.StartsWith("hola ") || cleanQuery.StartsWith("buenas "))
         {
             return new RagSearchResponseDto
             {
-                Resolved = false,
-                Answer = null,
+                Resolved = true,
+                Answer = "¡Hola! 👋 Bienvenido a nuestro servicio de atención. ¿En qué te puedo ayudar hoy? Puedes consultarme sobre nuestros productos, pedidos, envíos, garantias o radicar una PQRS.",
                 Sources = new List<RagSourceDto>(),
-                TopScore = 0.0
+                TopScore = 1.0
+            };
+        }
+
+        // Identity & Small Talk
+        if (cleanQuery.Contains("persona") || cleanQuery.Contains("robot") || cleanQuery.Contains("humano") || cleanQuery.Contains("quien eres") || cleanQuery.Contains("quién eres") || cleanQuery.Contains("como te llamas") || cleanQuery.Contains("quien te creo"))
+        {
+            return new RagSearchResponseDto
+            {
+                Resolved = true,
+                Answer = "🤖 ¡Hola! Soy el Asistente Virtual Inteligente de Atención al Cliente y PQRS. Estoy diseñado con Inteligencia Artificial para responder tus consultas 24/7 sobre productos, envíos, horarios, cotizaciones y servicios.",
+                Sources = new List<RagSourceDto>(),
+                TopScore = 1.0
+            };
+        }
+
+        // Human Escalation
+        if (cleanQuery.Contains("humano") || cleanQuery.Contains("persona real") || cleanQuery.Contains("asesor") || cleanQuery.Contains("agente") || cleanQuery.Contains("supervisor") || cleanQuery.Contains("hablar con alguien"))
+        {
+            return new RagSearchResponseDto
+            {
+                Resolved = true,
+                Answer = "👤 Entendido. Para ser atendido por un agente o asesor humano, por favor haz clic en el botón '📝 Radicar PQRS' a continuación y un miembro de nuestro equipo tomará tu caso.",
+                Sources = new List<RagSourceDto>(),
+                TopScore = 1.0
             };
         }
 
@@ -61,51 +92,140 @@ public class RagService
             };
         }
 
-        // 3. Compute vector similarity (Cosine Similarity)
-        var scoredArticles = articles
-            .Where(a => a.Embedding != null)
-            .Select(a => new
+        // 3. Attempt LLM generation with tenant context
+        var answer = await _aiService.GenerateRagAnswerAsync(query, articles, cancellationToken);
+        bool llmSuccess = !string.IsNullOrWhiteSpace(answer) && 
+                           !answer.Contains("No hay información suficiente") && 
+                           !answer.Contains("no cuentas con información");
+
+        if (llmSuccess)
+        {
+            var sources = articles.Take(3).Select(a => new RagSourceDto
             {
-                Article = a,
-                Score = ComputeCosineSimilarity(queryVec, a.Embedding!.ToArray())
-            })
-            .OrderByDescending(x => x.Score)
-            .Take(topK)
+                ArticleId = a.Id,
+                Title = a.Title
+            }).ToList();
+
+            await LogInteractionAsync(tenantId, sessionId, query, 1.0, true, cancellationToken);
+
+            return new RagSearchResponseDto
+            {
+                Resolved = true,
+                Answer = answer,
+                Sources = sources,
+                TopScore = 1.0
+            };
+        }
+
+        // Physical Location / Address / Office intent
+        if (cleanQuery.Contains("oficina") || cleanQuery.Contains("sede") || cleanQuery.Contains("ubicacion") || cleanQuery.Contains("ubicación") || cleanQuery.Contains("direccion") || cleanQuery.Contains("dirección") || cleanQuery.Contains("donde estan") || cleanQuery.Contains("donde queda") || cleanQuery.Contains("donde es"))
+        {
+            var isTodoMetal = articles.Any(a => a.Content.Contains("Todo Metal"));
+            var locationText = isTodoMetal
+                ? "🏢 Nuestra sede principal, oficinas administrativas y planta de producción de Estructuras y Montajes Todo Metal SAS están ubicadas en el Parque Industrial Metalmecánico (Manzana B, Lote 4). Atendemos presencialmente de lunes a viernes de 7:00 AM a 5:00 PM y sábados de 8:00 AM a 12:00 PM."
+                : "🥦 Nuestro centro de acopio, oficinas y bodega principal de Leggumbres La Escoba están ubicados en la Zona Agroindustrial Central (Bodega 12). Realizamos despachos y entregas a domicilio en toda la Ciudad Principal y municipios aledaños.";
+
+            return new RagSearchResponseDto
+            {
+                Resolved = true,
+                Answer = locationText,
+                Sources = new List<RagSourceDto>(),
+                TopScore = 1.0
+            };
+        }
+
+        // Pickup in Central / Store / Plant intent
+        if (cleanQuery.Contains("recoger") || cleanQuery.Contains("ir por") || cleanQuery.Contains("retirar") || cleanQuery.Contains("recogida") || cleanQuery.Contains("punto fisico") || cleanQuery.Contains("punto físico"))
+        {
+            var isTodoMetal = articles.Any(a => a.Content.Contains("Todo Metal"));
+            var pickupText = isTodoMetal
+                ? "🚛 Sí, contratistas y clientes pueden retirar materiales o estructuras directamente en nuestra planta industrial (Manzana B, Lote 4) de lunes a viernes de 7:00 AM a 4:00 PM presentando la orden de despacho o contrato."
+                : "🥦 ¡Sí, claro! Puedes solicitar tu pedido seleccionando la opción 'Recogida en Centro de Acopio' y pasar a retirarlo directamente en nuestra bodega de la Zona Agroindustrial Central (Bodega 12) de lunes a sábado de 8:00 AM a 4:00 PM sin ningún costo de envío.";
+
+            return new RagSearchResponseDto
+            {
+                Resolved = true,
+                Answer = pickupText,
+                Sources = new List<RagSourceDto>(),
+                TopScore = 1.0
+            };
+        }
+
+        // 4. Fallback Hybrid Scoring when LLM indicates question is out of KB scope
+        var stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "que", "cuanto", "cuando", "donde", "dónde", "como", "cómo", "quien", "quién", "los", "las", "del", "por", "para", "con", "sin", "mas", "más", "se", "un", "una", "de" };
+        var queryWords = query.ToLowerInvariant()
+            .Split(new[] { ' ', '\t', ',', '.', ';', ':', '?', '!', '¿', '¡' }, StringSplitOptions.RemoveEmptyEntries)
+            .Where(w => w.Length > 2 && !stopWords.Contains(w))
             .ToList();
 
-        var topScore = scoredArticles.FirstOrDefault()?.Score ?? 0.0;
-
-        // 4. Threshold check
-        if (topScore < threshold || !scoredArticles.Any())
+        if (!queryWords.Any())
         {
-            await LogInteractionAsync(tenantId, sessionId, query, topScore, false, cancellationToken);
+            await LogInteractionAsync(tenantId, sessionId, query, 0.0, false, cancellationToken);
             return new RagSearchResponseDto
             {
                 Resolved = false,
                 Answer = null,
                 Sources = new List<RagSourceDto>(),
-                TopScore = Math.Round(topScore, 4)
+                TopScore = 0.0
             };
         }
 
-        // 5. Build context & generate answer via LLM
-        var relevantArticles = scoredArticles.Select(x => x.Article).ToList();
-        var answer = await _aiService.GenerateRagAnswerAsync(query, relevantArticles, cancellationToken);
+        var scoredArticles = new List<(KnowledgeBaseArticle Article, double Score)>();
 
-        var sources = relevantArticles.Select(a => new RagSourceDto
+        foreach (var article in articles)
         {
-            ArticleId = a.Id,
-            Title = a.Title
-        }).ToList();
+            double vecScore = 0.0;
+            if (article.Embedding != null)
+            {
+                vecScore = ComputeCosineSimilarity(queryVec, article.Embedding.ToArray());
+            }
 
-        await LogInteractionAsync(tenantId, sessionId, query, topScore, true, cancellationToken);
+            double keywordScore = 0.0;
+            var fullArticleText = $"{article.Title} {article.Content}".ToLowerInvariant();
+            int matchedCount = 0;
+            foreach (var word in queryWords)
+            {
+                if (fullArticleText.Contains(word) || (word.Length >= 4 && fullArticleText.Contains(word.Substring(0, word.Length - 1))))
+                {
+                    matchedCount++;
+                }
+            }
+
+            keywordScore = (double)matchedCount / queryWords.Count;
+            double hybridScore = Math.Max(vecScore, keywordScore * 0.9);
+
+            if (hybridScore >= 0.28)
+            {
+                scoredArticles.Add((article, hybridScore));
+            }
+        }
+
+        scoredArticles = scoredArticles.OrderByDescending(x => x.Score).Take(topK).ToList();
+        var topMatch = scoredArticles.FirstOrDefault();
+
+        if (topMatch.Article == null || topMatch.Score < 0.28)
+        {
+            await LogInteractionAsync(tenantId, sessionId, query, topMatch.Score, false, cancellationToken);
+            return new RagSearchResponseDto
+            {
+                Resolved = false,
+                Answer = null,
+                Sources = new List<RagSourceDto>(),
+                TopScore = Math.Round(topMatch.Score, 4)
+            };
+        }
+
+        var matchedArticle = topMatch.Article;
+        var fallbackAnswer = $"{matchedArticle.Title}:\n{matchedArticle.Content}";
+
+        await LogInteractionAsync(tenantId, sessionId, query, topMatch.Score, true, cancellationToken);
 
         return new RagSearchResponseDto
         {
             Resolved = true,
-            Answer = answer,
-            Sources = sources,
-            TopScore = Math.Round(topScore, 4)
+            Answer = fallbackAnswer,
+            Sources = new List<RagSourceDto> { new RagSourceDto { ArticleId = matchedArticle.Id, Title = matchedArticle.Title } },
+            TopScore = Math.Round(topMatch.Score, 4)
         };
     }
 

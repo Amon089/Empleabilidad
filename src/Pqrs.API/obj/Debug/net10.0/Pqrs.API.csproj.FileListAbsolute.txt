@@ -142,3 +142,13 @@ C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\n
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\Pqrs.API.genruntimeconfig.cache
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\ref\Pqrs.API.dll
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\Pqrs.API.sourcelink.json
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\bin\Debug\net10.0\Pqrs.API.staticwebassets.runtime.json
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\fi6uqjm6o3-{0}-gokksi8mc5-gokksi8mc5.gz
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\nhxcq68shz-{0}-dls824a5so-dls824a5so.gz
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\aqv25szp4o-{0}-h5khd5kazi-h5khd5kazi.gz
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\nx4mbthgmx-{0}-jvpl69i7pm-jvpl69i7pm.gz
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\fwk01g1ng0-{0}-ujv8ojqvmp-ujv8ojqvmp.gz
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\vohbsjdmnn-{0}-nln7ayq8pv-nln7ayq8pv.gz
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\jmspx940gf-{0}-3akxkt9cmo-3akxkt9cmo.gz
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.API\obj\Debug\net10.0\compressed\gv6cp0afa0-{0}-7we8h3q2v0-7we8h3q2v0.gz

@@ -34,38 +34,72 @@ public class AiService : IAiService
 
     public async Task<float[]> GenerateEmbeddingAsync(string text, CancellationToken cancellationToken = default)
     {
-        var apiKey = _configuration["AI:ApiKey"];
-        
-        // If an API key is provided and not default placeholder, attempt real LLM API call
+        var apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY") 
+                  ?? Environment.GetEnvironmentVariable("AI_API_KEY") 
+                  ?? _configuration["AI:ApiKey"];
+        var provider = (_configuration["AI:Provider"] ?? "gemini").ToLowerInvariant();
+
         if (!string.IsNullOrWhiteSpace(apiKey) && apiKey != "YOUR_OPENAI_OR_GEMINI_API_KEY")
         {
             try
             {
-                var endpoint = "https://api.openai.com/v1/embeddings";
-                var model = _configuration["AI:EmbeddingModel"] ?? "text-embedding-3-small";
-
-                var payload = new
+                if (provider == "gemini")
                 {
-                    model = model,
-                    input = text
-                };
-
-                using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
-                request.Headers.Add("Authorization", $"Bearer {apiKey}");
-                request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.SendAsync(request, cancellationToken);
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonStr = await response.Content.ReadAsStringAsync(cancellationToken);
-                    using var doc = JsonDocument.Parse(jsonStr);
-                    var embeddingElem = doc.RootElement.GetProperty("data")[0].GetProperty("embedding");
-                    var floatList = new List<float>();
-                    foreach (var item in embeddingElem.EnumerateArray())
+                    var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key={apiKey}";
+                    var payload = new
                     {
-                        floatList.Add(item.GetSingle());
+                        model = "models/text-embedding-004",
+                        content = new
+                        {
+                            parts = new[] { new { text = text } }
+                        }
+                    };
+
+                    using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                    request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+                    var response = await _httpClient.SendAsync(request, cancellationToken);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonStr = await response.Content.ReadAsStringAsync(cancellationToken);
+                        using var doc = JsonDocument.Parse(jsonStr);
+                        var valuesElem = doc.RootElement.GetProperty("embedding").GetProperty("values");
+                        var floatList = new List<float>();
+                        foreach (var item in valuesElem.EnumerateArray())
+                        {
+                            floatList.Add(item.GetSingle());
+                        }
+                        return floatList.ToArray();
                     }
-                    return floatList.ToArray();
+                }
+                else // OpenAI Provider
+                {
+                    var endpoint = "https://api.openai.com/v1/embeddings";
+                    var model = _configuration["AI:EmbeddingModel"] ?? "text-embedding-3-small";
+
+                    var payload = new
+                    {
+                        model = model,
+                        input = text
+                    };
+
+                    using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                    request.Headers.Add("Authorization", $"Bearer {apiKey}");
+                    request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+                    var response = await _httpClient.SendAsync(request, cancellationToken);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonStr = await response.Content.ReadAsStringAsync(cancellationToken);
+                        using var doc = JsonDocument.Parse(jsonStr);
+                        var embeddingElem = doc.RootElement.GetProperty("data")[0].GetProperty("embedding");
+                        var floatList = new List<float>();
+                        foreach (var item in embeddingElem.EnumerateArray())
+                        {
+                            floatList.Add(item.GetSingle());
+                        }
+                        return floatList.ToArray();
+                    }
                 }
             }
             catch
@@ -74,48 +108,92 @@ public class AiService : IAiService
             }
         }
 
-        // Deterministic Fallback Word-Token Embedding generator
         return GenerateDeterministicEmbedding(text);
     }
 
     public async Task<string> GenerateRagAnswerAsync(string query, IEnumerable<KnowledgeBaseArticle> contextArticles, CancellationToken cancellationToken = default)
     {
-        var apiKey = _configuration["AI:ApiKey"];
+        var apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY") 
+                  ?? Environment.GetEnvironmentVariable("AI_API_KEY") 
+                  ?? _configuration["AI:ApiKey"];
+        var provider = (_configuration["AI:Provider"] ?? "gemini").ToLowerInvariant();
         var contextText = string.Join("\n\n---\n\n", contextArticles.Select(a => $"Título: {a.Title}\nContenido: {a.Content}"));
+        var prompt = $"Eres el Asistente Virtual Oficial de Atención al Cliente y PQRS. Tu trato es siempre muy amable, empático, profesional y respetuoso.\n\n" +
+                     $"INFORMACIÓN OFICIAL DE LA EMPRESA (BASE DE CONOCIMIENTOS):\n\n{contextText}\n\n" +
+                     $"INSTRUCCIONES DE RESPUESTA:\n" +
+                     $"- Si el usuario saluda o hace preguntas de cortesía (hola, buenos días, cómo estás), responde amablemente e indícale en qué puedes ayudarle.\n" +
+                     $"- Si el usuario pregunta tu identidad (quién eres, si eres robot, qué haces), explícale amablemente que eres el Asistente Virtual Inteligente de PQRS 24/7 de la empresa.\n" +
+                     $"- Si el usuario pide hablar con un agente humano, persona real, supervisor o radicar una queja, indícale amablemente que puede hacer clic en 'Radicar PQRS' para conectarlo con un asesor humano.\n" +
+                     $"- Para preguntas sobre compras, envíos, horarios, pagos, productos, garantías, cotizaciones o servicios, responde utilizando la información oficial provista arriba.\n" +
+                     $"- Si la pregunta es sobre una política o dato no mencionado en la base de conocimientos, responde amablemente indicando que no posees ese dato específico e invítale a radicar una PQRS.\n\n" +
+                     $"Pregunta del usuario: {query}";
 
         if (!string.IsNullOrWhiteSpace(apiKey) && apiKey != "YOUR_OPENAI_OR_GEMINI_API_KEY")
         {
             try
             {
-                var endpoint = "https://api.openai.com/v1/chat/completions";
-                var model = _configuration["AI:ChatModel"] ?? "gpt-4o-mini";
-
-                var prompt = $"Eres un asistente de atención al cliente estricto. " +
-                             $"Responde a la pregunta del usuario utilizando ÚNICAMENTE la siguiente información de la base de conocimiento:\n\n{contextText}\n\n" +
-                             $"Pregunta: {query}\n\n" +
-                             $"Si la información provista no responde claramente a la pregunta, indica que no cuentas con información suficiente. No inventes politicas, fechas, ni precios.";
-
-                var payload = new
+                if (provider == "gemini")
                 {
-                    model = model,
-                    messages = new[]
+                    var modelCandidates = new[] { _configuration["AI:ChatModel"] ?? "gemini-1.5-flash", "gemini-1.5-flash", "gemini-2.0-flash" }.Distinct();
+
+                    foreach (var model in modelCandidates)
                     {
-                        new { role = "user", content = prompt }
-                    },
-                    temperature = 0.1
-                };
+                        var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={apiKey}";
+                        var payload = new
+                        {
+                            contents = new[]
+                            {
+                                new { parts = new[] { new { text = prompt } } }
+                            },
+                            generationConfig = new { temperature = 0.2 }
+                        };
 
-                using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
-                request.Headers.Add("Authorization", $"Bearer {apiKey}");
-                request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+                        using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                        request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.SendAsync(request, cancellationToken);
-                if (response.IsSuccessStatusCode)
+                        var response = await _httpClient.SendAsync(request, cancellationToken);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var jsonStr = await response.Content.ReadAsStringAsync(cancellationToken);
+                            using var doc = JsonDocument.Parse(jsonStr);
+                            var answer = doc.RootElement
+                                .GetProperty("candidates")[0]
+                                .GetProperty("content")
+                                .GetProperty("parts")[0]
+                                .GetProperty("text")
+                                .GetString();
+
+                            if (!string.IsNullOrWhiteSpace(answer)) return answer.Trim();
+                        }
+                    }
+                }
+                else // OpenAI Provider
                 {
-                    var jsonStr = await response.Content.ReadAsStringAsync(cancellationToken);
-                    using var doc = JsonDocument.Parse(jsonStr);
-                    var answer = doc.RootElement.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString();
-                    if (!string.IsNullOrWhiteSpace(answer)) return answer.Trim();
+                    var endpoint = "https://api.openai.com/v1/chat/completions";
+                    var model = _configuration["AI:ChatModel"] ?? "gpt-4o-mini";
+
+                    var payload = new
+                    {
+                        model = model,
+                        messages = new[]
+                        {
+                            new { role = "user", content = prompt }
+                        },
+                        temperature = 0.1
+                    };
+
+                    using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                    request.Headers.Add("Authorization", $"Bearer {apiKey}");
+                    request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+                    var response = await _httpClient.SendAsync(request, cancellationToken);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonStr = await response.Content.ReadAsStringAsync(cancellationToken);
+                        using var doc = JsonDocument.Parse(jsonStr);
+                        var answer = doc.RootElement.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString();
+                        if (!string.IsNullOrWhiteSpace(answer)) return answer.Trim();
+                    }
                 }
             }
             catch
@@ -125,12 +203,6 @@ public class AiService : IAiService
         }
 
         // Rule-based deterministic RAG Answer synthesis based strictly on context
-        var firstArticle = contextArticles.FirstOrDefault();
-        if (firstArticle != null)
-        {
-            return $"Con base en la documentación de '{firstArticle.Title}' de Leggumbres La Escoba: {firstArticle.Content}";
-        }
-
         return "No hay información suficiente en la base de conocimientos para responder esta consulta.";
     }
 

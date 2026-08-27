@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Acceso - PQRS SaaS Multi-Tenant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .portal-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .portal-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .portal-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .portal-header p {
+      color: #64748b;
+      font-size: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .access-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .access-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+      border-color: #2563eb;
+    }
+    .icon { font-size: 40px; margin-bottom: 12px; }
+    .title { font-size: 18px; font-weight: 700; margin-bottom: 6px; color: #0f172a; }
+    .desc { font-size: 13px; color: #64748b; margin-bottom: 16px; flex: 1; }
+    .btn {
+      padding: 8px 18px;
+      background: #2563eb;
+      color: white;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="portal-card">
+    <div class="portal-header">
+      <h1>🚀 PQRS SaaS Multi-Tenant con IA</h1>
+      <p>Selecciona la vista o aplicación de demostración a la que deseas acceder:</p>
+    </div>
+
+    <div class="grid">
+      <a href="/legumbres/index.html" class="access-card">
+        <div class="icon">🧺</div>
+        <div class="title">Tenant A: Leggumbres</div>
+        <div class="desc">Sitio Agro / Orgánico con Widget live embedded.</div>
+        <div class="btn" style="background: #16a34a;">Abrir Web</div>
+      </a>
+
+      <a href="/todometal/index.html" class="access-card">
+        <div class="icon">🏗️</div>
+        <div class="title">Tenant B: Todo Metal</div>
+        <div class="desc">Sitio Industrial con Widget live embedded.</div>
+        <div class="btn" style="background: #eab308; color: #0f172a;">Abrir Web</div>
+      </a>
+
+      <a href="/dashboard/index.html" class="access-card">
+        <div class="icon">📊</div>
+        <div class="title">Dashboard Multi-Tenant</div>
+        <div class="desc">Console SPA de gestión con SignalR y Triaje IA.</div>
+        <div class="btn">Abrir Consola</div>
+      </a>
+
+      <a href="/swagger" class="access-card">
+        <div class="icon">📜</div>
+        <div class="title">Swagger API Docs</div>
+        <div class="desc">Documentación OpenAPI interactiva de la API REST.</div>
+        <div class="btn" style="background: #475569;">Ver API</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

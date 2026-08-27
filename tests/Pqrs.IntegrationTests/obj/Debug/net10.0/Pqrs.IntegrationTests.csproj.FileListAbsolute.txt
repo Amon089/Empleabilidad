@@ -446,3 +446,5 @@ C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.IntegrationTe
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.IntegrationTests\obj\Debug\net10.0\Pqrs.IntegrationTests.pdb
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.IntegrationTests\obj\Debug\net10.0\Pqrs.IntegrationTests.genruntimeconfig.cache
 C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.IntegrationTests\obj\Debug\net10.0\ref\Pqrs.IntegrationTests.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.IntegrationTests\obj\Debug\net10.0\Pqrs.IntegrationTests.sourcelink.json
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\tests\Pqrs.IntegrationTests\bin\Debug\net10.0\Pqrs.API.staticwebassets.runtime.json

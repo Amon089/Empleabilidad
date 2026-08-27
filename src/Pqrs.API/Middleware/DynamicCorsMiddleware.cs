@@ -24,7 +24,12 @@ public class DynamicCorsMiddleware
             if (context.Items.TryGetValue("Tenant", out var tenantObj) && tenantObj is Tenant tenant)
             {
                 var allowed = tenant.AllowedOrigins.Select(o => o.TrimEnd('/')).ToList();
-                if (allowed.Contains(requestOrigin, System.StringComparer.OrdinalIgnoreCase))
+                bool isAllowed = allowed.Contains(requestOrigin, System.StringComparer.OrdinalIgnoreCase)
+                              || allowed.Contains("*")
+                              || requestOrigin.StartsWith("http://localhost", System.StringComparison.OrdinalIgnoreCase)
+                              || requestOrigin.StartsWith("http://127.0.0.1", System.StringComparison.OrdinalIgnoreCase);
+
+                if (isAllowed)
                 {
                     context.Response.Headers["Access-Control-Allow-Origin"] = requestOrigin;
                     context.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Widget-Key";

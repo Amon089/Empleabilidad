@@ -38,7 +38,7 @@ public class WidgetController : ControllerBase
     [HttpPost("rag-search")]
     public async Task<ActionResult<RagSearchResponseDto>> RagSearch([FromBody] RagSearchRequestDto request, CancellationToken cancellationToken)
     {
-        double threshold = double.TryParse(_configuration["Rag:SimilarityThreshold"], NumberStyles.Any, CultureInfo.InvariantCulture, out var t) ? t : 0.78;
+        double threshold = double.TryParse(_configuration["Rag:SimilarityThreshold"], NumberStyles.Any, CultureInfo.InvariantCulture, out var t) ? t : 0.35;
         int topK = int.TryParse(_configuration["Rag:TopK"], out var k) ? k : 5;
 
         var result = await _ragService.SearchAndAnswerAsync(

@@ -34,7 +34,26 @@ public class AuthService
             throw new AppException("INVALID_CREDENTIALS", "Invalid email or password.");
         }
 
+        var tenant = await _context.Tenants
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(t => t.Id == user.TenantId, cancellationToken);
+
         var token = _tokenGenerator.GenerateToken(user);
-        return new AuthResponseDto { AccessToken = token };
+
+        return new AuthResponseDto
+        {
+            AccessToken = token,
+            User = new UserDto
+            {
+                Id = user.Id,
+                TenantId = user.TenantId,
+                TenantName = tenant?.Name ?? "Tenant",
+                TenantSlug = tenant?.Slug ?? "tenant",
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                IsActive = user.IsActive
+            }
+        };
     }
 }

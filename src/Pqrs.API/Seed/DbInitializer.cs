@@ -25,249 +25,297 @@ public static class DbInitializer
             await context.Database.EnsureCreatedAsync();
         }
 
-        if (await context.Tenants.AnyAsync())
-        {
-            return; // DB has been seeded already
-        }
+        var tenantA = await context.Tenants.FirstOrDefaultAsync(t => t.Slug == "leggumbres-la-escoba");
+        var tenantB = await context.Tenants.FirstOrDefaultAsync(t => t.Slug == "todo-metal");
 
         var passwordHash = BCrypt.Net.BCrypt.HashPassword("Password123!");
 
         // ----------------------------------------------------
         // TENANT A - Leggumbres La Escoba
         // ----------------------------------------------------
-        var tenantA = new Tenant
+        if (tenantA == null)
         {
-            Id = Guid.NewGuid(),
-            Name = "Leggumbres La Escoba",
-            Slug = "leggumbres-la-escoba",
-            WidgetPublicKey = "pk_live_escoba_12345",
-            AllowedOrigins = new List<string>
+            tenantA = new Tenant
             {
-                "https://leggumbres-la-escoba.local",
-                "https://www.leggumbres-la-escoba.local"
-            },
-            IsActive = true,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+                Id = Guid.NewGuid(),
+                Name = "Leggumbres La Escoba",
+                Slug = "leggumbres-la-escoba",
+                WidgetPublicKey = "pk_live_escoba_12345",
+                AllowedOrigins = new List<string>
+                {
+                    "https://leggumbres-la-escoba.local",
+                    "https://www.leggumbres-la-escoba.local"
+                },
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            context.Tenants.Add(tenantA);
 
-        var userA1 = new User
-        {
-            Id = Guid.NewGuid(),
-            TenantId = tenantA.Id,
-            Name = "Admin Leggumbres",
-            Email = "admin@leggumbres.local",
-            PasswordHash = passwordHash,
-            Role = UserRole.ADMIN,
-            IsActive = true
-        };
-
-        var userA2 = new User
-        {
-            Id = Guid.NewGuid(),
-            TenantId = tenantA.Id,
-            Name = "Agente Leggumbres",
-            Email = "agent@leggumbres.local",
-            PasswordHash = passwordHash,
-            Role = UserRole.AGENT,
-            IsActive = true
-        };
-
-        var kbA1Content = "Los pedidos se realizan a traves de nuestra plataforma web o WhatsApp. El centro de acopio recibe los productos de los campesinos, los clasifica y los empaca para envio.";
-        var kbA2Content = "Zonas de cobertura: Ciudad Principal y Municipios aledanos. Horarios de entrega: lunes a sabado de 6:00 AM a 2:00 PM.";
-        var kbA3Content = "Politica de devoluciones: Si un producto llega en mal estado o incompleto, se realiza el cambio o reembolso reportando dentro de las 24 horas posteriores a la entrega.";
-        var kbA4Content = "Ofrecemos Papa, Yuca, Platano, Frijol, Lentejas, Arveja, Tomate, Cebolla, Zanahoria y Aguacate frescos.";
-
-        var articlesA = new List<KnowledgeBaseArticle>
-        {
-            new KnowledgeBaseArticle
+            var userA1 = new User
             {
                 Id = Guid.NewGuid(),
                 TenantId = tenantA.Id,
-                Title = "Como realizar un pedido y entregas",
-                Content = kbA1Content,
-                Embedding = new Vector(await aiService.GenerateEmbeddingAsync($"Como realizar un pedido y entregas\n{kbA1Content}")),
+                Name = "Admin Leggumbres",
+                Email = "admin@leggumbres.local",
+                PasswordHash = passwordHash,
+                Role = UserRole.ADMIN,
                 IsActive = true
-            },
-            new KnowledgeBaseArticle
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantA.Id,
-                Title = "Zonas de cobertura y horarios de entrega",
-                Content = kbA2Content,
-                Embedding = new Vector(await aiService.GenerateEmbeddingAsync($"Zonas de cobertura y horarios de entrega\n{kbA2Content}")),
-                IsActive = true
-            },
-            new KnowledgeBaseArticle
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantA.Id,
-                Title = "Politica de cambios y devoluciones en mal estado",
-                Content = kbA3Content,
-                Embedding = new Vector(await aiService.GenerateEmbeddingAsync($"Politica de cambios y devoluciones en mal estado\n{kbA3Content}")),
-                IsActive = true
-            },
-            new KnowledgeBaseArticle
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantA.Id,
-                Title = "Productos disponibles y de temporada",
-                Content = kbA4Content,
-                Embedding = new Vector(await aiService.GenerateEmbeddingAsync($"Productos disponibles y de temporada\n{kbA4Content}")),
-                IsActive = true
-            }
-        };
+            };
 
-        var ticketsA = new List<Ticket>
-        {
-            new Ticket
+            var userA2 = new User
             {
                 Id = Guid.NewGuid(),
                 TenantId = tenantA.Id,
-                CustomerName = "Carlos Gomez",
-                CustomerEmail = "carlos@example.com",
-                Subject = "Mi pedido llego incompleto",
-                Description = "Mi pedido llego incompleto, no recibi la yuca ni las papas.",
-                Type = TicketType.CLAIM,
-                Status = TicketStatus.IN_PROGRESS,
-                Priority = Priority.HIGH,
-                Sentiment = Sentiment.NEGATIVE,
-                Summary = "Cliente informa pedido incompleto sin papas ni yuca.",
-                ResolvedByRag = false
-            },
-            new Ticket
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantA.Id,
-                CustomerName = "Maria Rodriguez",
-                CustomerEmail = "maria@example.com",
-                Subject = "Las papas llegaron en mal estado",
-                Description = "Las papas venian magulladas y en mal estado.",
-                Type = TicketType.CLAIM,
-                Status = TicketStatus.PENDING,
-                Priority = Priority.HIGH,
-                Sentiment = Sentiment.NEGATIVE,
-                Summary = "Reclamacion por producto en mal estado.",
-                ResolvedByRag = false
-            }
-        };
+                Name = "Agente Leggumbres",
+                Email = "agent@leggumbres.local",
+                PasswordHash = passwordHash,
+                Role = UserRole.AGENT,
+                IsActive = true
+            };
+            context.Users.AddRange(userA1, userA2);
+        }
 
         // ----------------------------------------------------
         // TENANT B - Estructuras y Montajes Todo Metal SAS
         // ----------------------------------------------------
-        var tenantB = new Tenant
+        if (tenantB == null)
         {
-            Id = Guid.NewGuid(),
-            Name = "Estructuras y Montajes Todo Metal SAS",
-            Slug = "todo-metal",
-            WidgetPublicKey = "pk_live_todometal_67890",
-            AllowedOrigins = new List<string>
+            tenantB = new Tenant
             {
-                "https://todo-metal.local",
-                "https://www.todo-metal.local"
-            },
-            IsActive = true,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+                Id = Guid.NewGuid(),
+                Name = "Estructuras y Montajes Todo Metal SAS",
+                Slug = "todo-metal",
+                WidgetPublicKey = "pk_live_todometal_67890",
+                AllowedOrigins = new List<string>
+                {
+                    "https://todo-metal.local",
+                    "https://www.todo-metal.local"
+                },
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            context.Tenants.Add(tenantB);
 
-        var userB1 = new User
-        {
-            Id = Guid.NewGuid(),
-            TenantId = tenantB.Id,
-            Name = "Admin Todo Metal",
-            Email = "admin@todometal.local",
-            PasswordHash = passwordHash,
-            Role = UserRole.ADMIN,
-            IsActive = true
-        };
-
-        var userB2 = new User
-        {
-            Id = Guid.NewGuid(),
-            TenantId = tenantB.Id,
-            Name = "Agente Todo Metal",
-            Email = "agent@todometal.local",
-            PasswordHash = passwordHash,
-            Role = UserRole.AGENT,
-            IsActive = true
-        };
-
-        var kbB1Content = "Ofrecemos diseno, fabricacion, montaje y mantenimiento de estructuras metalicas, puentes y obras de infraestructura para gobernaciones y entidades.";
-        var kbB2Content = "Para solicitar cotizacion o visita tecnica, se debe enviar la documentacion requerida del proyecto a nuestro canal de atencion de contratacion.";
-        var kbB3Content = "Garantias y postventa: Todas nuestras estructuras cuentan con garantia legal de 10 anos en elementos estructurales. Ante reportes de corrosion o problemas estructurales se programa visita prioritaria.";
-
-        var articlesB = new List<KnowledgeBaseArticle>
-        {
-            new KnowledgeBaseArticle
+            var userB1 = new User
             {
                 Id = Guid.NewGuid(),
                 TenantId = tenantB.Id,
-                Title = "Servicios de estructuras metalicas y contratacion",
-                Content = kbB1Content,
-                Embedding = new Vector(await aiService.GenerateEmbeddingAsync($"Servicios de estructuras metalicas y contratacion\n{kbB1Content}")),
+                Name = "Admin Todo Metal",
+                Email = "admin@todometal.local",
+                PasswordHash = passwordHash,
+                Role = UserRole.ADMIN,
                 IsActive = true
-            },
-            new KnowledgeBaseArticle
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantB.Id,
-                Title = "Solicitud de cotizaciones y visita tecnica",
-                Content = kbB2Content,
-                Embedding = new Vector(await aiService.GenerateEmbeddingAsync($"Solicitud de cotizaciones y visita tecnica\n{kbB2Content}")),
-                IsActive = true
-            },
-            new KnowledgeBaseArticle
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantB.Id,
-                Title = "Garantias y reporte de problemas estructurales",
-                Content = kbB3Content,
-                Embedding = new Vector(await aiService.GenerateEmbeddingAsync($"Garantias y reporte de problemas estructurales\n{kbB3Content}")),
-                IsActive = true
-            }
-        };
+            };
 
-        var ticketsB = new List<Ticket>
+            var userB2 = new User
+            {
+                Id = Guid.NewGuid(),
+                TenantId = tenantB.Id,
+                Name = "Agente Todo Metal",
+                Email = "agent@todometal.local",
+                PasswordHash = passwordHash,
+                Role = UserRole.AGENT,
+                IsActive = true
+            };
+            context.Users.AddRange(userB1, userB2);
+        }
+
+        await context.SaveChangesAsync();
+
+        // ----------------------------------------------------
+        // REFRESH & SEED ARTICLES FOR TENANT A (Leggumbres)
+        // ----------------------------------------------------
+        var existingArticlesA = await context.KnowledgeBaseArticles
+            .IgnoreQueryFilters()
+            .Where(a => a.TenantId == tenantA.Id)
+            .ToListAsync();
+        context.KnowledgeBaseArticles.RemoveRange(existingArticlesA);
+
+        var articlesDataA = new List<(string Title, string Content)>
         {
-            new Ticket
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantB.Id,
-                CustomerName = "Gobernacion de Antioquia",
-                CustomerEmail = "obras@antioquia.gov.co",
-                Subject = "Necesito una visita tecnica",
-                Description = "Requerimos inspeccion en sitio para el montaje del nuevo puente peatonal.",
-                Type = TicketType.PETITION,
-                Status = TicketStatus.PENDING,
-                Priority = Priority.MEDIUM,
-                Sentiment = Sentiment.NEUTRAL,
-                Summary = "Solicitud de visita tecnica para evaluacion de proyecto.",
-                ResolvedByRag = false
-            },
-            new Ticket
-            {
-                Id = Guid.NewGuid(),
-                TenantId = tenantB.Id,
-                CustomerName = "Ing. Roberto Martinez",
-                CustomerEmail = "roberto@infraestructura.com",
-                Subject = "El puente presenta un problema en una union",
-                Description = "Se evidencia una ligera corrosion en los pernos de la union 4B del puente vehicular.",
-                Type = TicketType.CLAIM,
-                Status = TicketStatus.IN_PROGRESS,
-                Priority = Priority.HIGH,
-                Sentiment = Sentiment.NEGATIVE,
-                Summary = "Reporte de problema estructural por corrosion en union.",
-                ResolvedByRag = false
-            }
+            (
+                "Cómo realizar un pedido y canales de atención",
+                "Puedes realizar tus pedidos a través de nuestro sitio web oficial, aplicación móvil o vía WhatsApp al (+57) 300 123 4567. Nuestro centro de acopio recibe frutas y verduras frescas directamente de campesinos locales, las clasifica, pesa y empaca en empaques biodegradables para entrega a domicilio."
+            ),
+            (
+                "Zonas de cobertura, envíos y horarios de entrega",
+                "Realizamos entregas a domicilio en toda la Ciudad Principal y Municipios aledaños. Entregamos de lunes a sábado entre las 6:00 AM y las 2:00 PM. Los pedidos realizados antes de las 5:00 PM se entregan a primera hora del día siguiente."
+            ),
+            (
+                "Garantía de frescura, cambios y devoluciones",
+                "Garantizamos el 100% de la frescura de nuestros productos del campo. Si algún producto llega en mal estado, magullado o incompleto, puedes solicitar el cambio sin costo adicional o reembolso enviando una foto dentro de las 24 horas siguientes a la entrega a través del chat o sistema PQRS."
+            ),
+            (
+                "Catálogo de productos frescos y ofertas de temporada",
+                "Contamos con oferta permanente y de temporada: Papa sabanera, Papa criolla, Yuca, Plátano verde y maduro, Fríjol cargamanto, Lentejas, Arveja, Tomate chonto, Cebolla cabezona y larga, Zanahoria, Aguacate hass, Mango, Papaya, Naranja y Limón tahití."
+            ),
+            (
+                "Medios de pago aceptados",
+                "Aceptamos pago en efectivo contra entrega, transferencias electrónicas a través de Nequi, Daviplata, Bancolombia, así como tarjetas de crédito y débito mediante nuestra pasarela de pagos segura en el sitio web."
+            ),
+            (
+                "Horarios de atención y días de servicio",
+                "Ofrecemos atención al cliente y servicio de entregas a domicilio de lunes a sábado de 6:00 AM a 2:00 PM. ¿Qué días tienen servicio o atención? Atendemos y realizamos despachos de lunes a sábado."
+            ),
+            (
+                "Ubicación de oficinas, sede principal y dirección de acopio",
+                "¿Dónde está la oficina o bodega de Leggumbres La Escoba? Nuestra sede principal, oficinas de atención y centro de acopio están ubicados en la Zona Agroindustrial Central (Bodega 12). Realizamos envíos a domicilio en toda la Ciudad Principal y municipios aledaños."
+            ),
+            (
+                "Recogida en centro de acopio, retiro en punto físico y bodega",
+                "¿Puedo ir por mi pedido o recogerlo en la central/bodega? ¡Sí, claro! Puedes realizar tu pedido a través de la web o WhatsApp seleccionando la opción 'Recogida en Centro de Acopio' y pasar a retirarlo personalmente en nuestra bodega de la Zona Agroindustrial Central (Bodega 12) de lunes a sábado entre las 8:00 AM y las 4:00 PM sin ningún costo de envío."
+            )
         };
 
-        context.Tenants.AddRange(tenantA, tenantB);
-        context.Users.AddRange(userA1, userA2, userB1, userB2);
-        context.KnowledgeBaseArticles.AddRange(articlesA);
-        context.KnowledgeBaseArticles.AddRange(articlesB);
-        context.Tickets.AddRange(ticketsA);
-        context.Tickets.AddRange(ticketsB);
+        foreach (var data in articlesDataA)
+        {
+            var emb = await aiService.GenerateEmbeddingAsync($"{data.Title}\n{data.Content}");
+            context.KnowledgeBaseArticles.Add(new KnowledgeBaseArticle
+            {
+                Id = Guid.NewGuid(),
+                TenantId = tenantA.Id,
+                Title = data.Title,
+                Content = data.Content,
+                Embedding = new Vector(emb),
+                IsActive = true
+            });
+        }
+
+        // ----------------------------------------------------
+        // REFRESH & SEED ARTICLES FOR TENANT B (Todo Metal)
+        // ----------------------------------------------------
+        var existingArticlesB = await context.KnowledgeBaseArticles
+            .IgnoreQueryFilters()
+            .Where(a => a.TenantId == tenantB.Id)
+            .ToListAsync();
+        context.KnowledgeBaseArticles.RemoveRange(existingArticlesB);
+
+        var articlesDataB = new List<(string Title, string Content)>
+        {
+            (
+                "Servicios de estructuras metálicas e infraestructura",
+                "Estructuras y Montajes Todo Metal SAS se especializa en diseño, cálculo estructural, fabricación, montaje y mantenimiento preventivo y correctivo de estructuras de acero, puentes vehiculares y peatonales, cubiertas industriales y naves comerciales para alcaldías, gobernaciones y sector privado."
+            ),
+            (
+                "Solicitud de cotizaciones, planos y visitas técnicas",
+                "Para solicitar una cotización o visita técnica en sitio, debes adjuntar los planos de arquitectura e ingeniería e incluir el pliego de condiciones enviándolo al correo proyectos@todometal.local o radicando una solicitud en nuestro portal. Un ingeniero especialista programará la visita técnica en un plazo máximo de 48 horas hábiles."
+            ),
+            (
+                "Garantía legal y protocolo postventa estructural",
+                "Todas nuestras obras y estructuras cuentan con una garantía legal de 10 años en elementos estructurales principales y 5 años en pintura anticorrosiva y uniones soldadas según la norma NSR-10. Ante cualquier novedad de corrosión, fisura o desajuste de pernos, enviamos una cuadrilla de inspección prioritaria en menos de 24 horas."
+            ),
+            (
+                "Certificaciones de calidad, normas NSR-10 y AWS D1.1",
+                "Cumplimos rigurosamente con el Reglamento Colombiano de Construcción Sismo Resistente NSR-10 y la norma internacional AWS D1.1 de soldadura en estructuras de acero. Todo nuestro personal de soldadores cuenta con certificación vigente y realizamos Ensayos No Destructivos (END) por Ultrasonido y Tintas Penetrantes."
+            ),
+            (
+                "Formas de pago y condiciones comerciales de proyectos",
+                "Trabajamos bajo esquemas de contratación por avance de obra: 50% de anticipo al firmar contrato para adquisición de perfiles de acero, 40% según actas parciales de avance de fabricación y montaje, y 10% restante a la firma del acta de recibo final a satisfacción."
+            ),
+            (
+                "Horarios de atención, días de servicio y canales de atención",
+                "Prestamos servicio de atención comercial, técnica e ingenieril de lunes a viernes de 7:00 AM a 5:00 PM y sábados de 8:00 AM a 12:00 PM. ¿Qué días tienen servicio o atención? Ofrecemos servicio de lunes a sábado. Puedes realizar tus solicitudes a través del portal de atención o escribiendo a proyectos@todometal.local."
+            ),
+            (
+                "Ubicación de oficinas, sede principal y planta industrial",
+                "¿Dónde está la oficina o sede de Estructuras y Montajes Todo Metal SAS? Nuestra sede principal, oficinas administrativas y planta de producción están ubicadas en el Parque Industrial Metalmecánico (Manzana B, Lote 4). Atendemos de lunes a viernes de 7:00 AM a 5:00 PM y sábados de 8:00 AM a 12:00 PM."
+            ),
+            (
+                "Retiro de materiales, perfiles y recogida en planta industrial",
+                "¿Puedo ir por materiales o recoger elementos en la planta? Sí, contratistas y clientes pueden enviar vehículos autorizados para retirar elementos fabricados, perfiles de acero o estructuras en nuestra planta industrial de lunes a viernes de 7:00 AM a 4:00 PM presentando la orden de despacho o contrato firmado."
+            )
+        };
+
+        foreach (var data in articlesDataB)
+        {
+            var emb = await aiService.GenerateEmbeddingAsync($"{data.Title}\n{data.Content}");
+            context.KnowledgeBaseArticles.Add(new KnowledgeBaseArticle
+            {
+                Id = Guid.NewGuid(),
+                TenantId = tenantB.Id,
+                Title = data.Title,
+                Content = data.Content,
+                Embedding = new Vector(emb),
+                IsActive = true
+            });
+        }
+
+        // Seed Tickets if missing
+        if (!await context.Tickets.AnyAsync())
+        {
+            var ticketsA = new List<Ticket>
+            {
+                new Ticket
+                {
+                    Id = Guid.NewGuid(),
+                    TenantId = tenantA.Id,
+                    CustomerName = "Carlos Gomez",
+                    CustomerEmail = "carlos@example.com",
+                    Subject = "Mi pedido llego incompleto",
+                    Description = "Mi pedido llego incompleto, no recibi la yuca ni las papas.",
+                    Type = TicketType.CLAIM,
+                    Status = TicketStatus.IN_PROGRESS,
+                    Priority = Priority.HIGH,
+                    Sentiment = Sentiment.NEGATIVE,
+                    Summary = "Cliente informa pedido incompleto sin papas ni yuca.",
+                    ResolvedByRag = false
+                },
+                new Ticket
+                {
+                    Id = Guid.NewGuid(),
+                    TenantId = tenantA.Id,
+                    CustomerName = "Maria Rodriguez",
+                    CustomerEmail = "maria@example.com",
+                    Subject = "Las papas llegaron en mal estado",
+                    Description = "Las papas venian magulladas y en mal estado.",
+                    Type = TicketType.CLAIM,
+                    Status = TicketStatus.PENDING,
+                    Priority = Priority.HIGH,
+                    Sentiment = Sentiment.NEGATIVE,
+                    Summary = "Reclamacion por producto en mal estado.",
+                    ResolvedByRag = false
+                }
+            };
+
+            var ticketsB = new List<Ticket>
+            {
+                new Ticket
+                {
+                    Id = Guid.NewGuid(),
+                    TenantId = tenantB.Id,
+                    CustomerName = "Gobernacion de Antioquia",
+                    CustomerEmail = "obras@antioquia.gov.co",
+                    Subject = "Necesito una visita tecnica",
+                    Description = "Requerimos inspeccion en sitio para el montaje del nuevo puente peatonal.",
+                    Type = TicketType.PETITION,
+                    Status = TicketStatus.PENDING,
+                    Priority = Priority.MEDIUM,
+                    Sentiment = Sentiment.NEUTRAL,
+                    Summary = "Solicitud de visita tecnica para evaluacion de proyecto.",
+                    ResolvedByRag = false
+                },
+                new Ticket
+                {
+                    Id = Guid.NewGuid(),
+                    TenantId = tenantB.Id,
+                    CustomerName = "Ing. Roberto Martinez",
+                    CustomerEmail = "roberto@infraestructura.com",
+                    Subject = "El puente presenta un problema en una union",
+                    Description = "Se evidencia una ligera corrosion en los pernos de la union 4B del puente vehicular.",
+                    Type = TicketType.CLAIM,
+                    Status = TicketStatus.IN_PROGRESS,
+                    Priority = Priority.HIGH,
+                    Sentiment = Sentiment.NEGATIVE,
+                    Summary = "Reporte de problema estructural por corrosion en union.",
+                    ResolvedByRag = false
+                }
+            };
+
+            context.Tickets.AddRange(ticketsA);
+            context.Tickets.AddRange(ticketsB);
+        }
 
         await context.SaveChangesAsync();
     }

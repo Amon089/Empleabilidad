@@ -85,10 +85,11 @@ public class PqrsDbContext : DbContext, IApplicationDbContext
             }
             else
             {
+                // ValueConverter to JSON string for non-Npgsql / InMemory database testing
                 builder.Property(k => k.Embedding)
                     .HasConversion(
-                        v => v == null ? null : v.ToArray(),
-                        v => v == null ? null : new Vector(v)
+                        v => v == null ? null : JsonSerializer.Serialize(v.ToArray(), (JsonSerializerOptions?)null),
+                        v => string.IsNullOrWhiteSpace(v) ? null : new Vector(JsonSerializer.Deserialize<float[]>(v, (JsonSerializerOptions?)null)!)
                     );
             }
 

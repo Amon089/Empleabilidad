@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo Metal SAS | Engineering the Future of Infrastructure</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Dark Header -->
+  <header class="header">
+    <div class="container nav-container">
+      <div class="logo">
+        <span class="logo-icon">🏗️</span>
+        <span class="logo-text">TODO METAL <strong>SAS</strong></span>
+      </div>
+      <nav class="nav-links">
+        <a href="#capabilities" class="active">Capabilities</a>
+        <a href="#projects">Projects</a>
+        <a href="#services">Services</a>
+        <a href="#engineering">Engineering</a>
+        <a href="#quality">Quality</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="btn btn-yellow" onclick="alert('Solicitud de Cotización Técnica')">Request Quote</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">✦ PRECISION ENGINEERING</div>
+      <h1>Engineering the Future of Infrastructure</h1>
+      <p>Advanced metallic structures, bridge construction, and heavy industrial montages designed for maximum durability and structural integrity.</p>
+      <div class="hero-btns">
+        <a href="#capabilities" class="btn btn-yellow">Explore Capabilities</a>
+        <a href="#contact" class="btn btn-dark-outline">Contact Engineering</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Capabilities Section -->
+  <section id="capabilities" class="section bg-dark">
+    <div class="container">
+      <div class="section-title-wrap">
+        <div>
+          <h2>Core Capabilities</h2>
+          <p class="section-sub">Technical specifications and structural discipline ensuring long-scale industrial deployments.</p>
+        </div>
+      </div>
+
+      <div class="capabilities-grid">
+        <!-- Metallic Structures Main Card -->
+        <div class="cap-card card-main">
+          <div class="card-bg-img img-steel"></div>
+          <div class="card-gradient"></div>
+          <div class="card-content-overlay">
+            <span class="yellow-tag">HEAVY FABRICATION</span>
+            <h3>Metallic Structures</h3>
+            <p>Custom fabrication of heavy-duty steel frameworks for commercial and industrial facilities. Utilizing advanced CAD modeling and CNC machining for precision tolerances.</p>
+          </div>
+        </div>
+
+        <!-- Industrial Montages Card -->
+        <div class="cap-card card-dark-info">
+          <div class="info-icon-badge">⚙️</div>
+          <h3>Industrial Montages</h3>
+          <p>Rapid assembly and installation of complex industrial machinery and plant infrastructure.</p>
+          <ul class="spec-list">
+            <li><span>•</span> Plant Relocation</li>
+            <li><span>•</span> Heavy Equipment Rigging</li>
+            <li><span>•</span> Process Piping Assembly</li>
+          </ul>
+        </div>
+
+        <!-- Bridge Construction Card -->
+        <div class="cap-card card-bridge">
+          <div class="bridge-content">
+            <span class="yellow-tag">INFRASTRUCTURE</span>
+            <h3>Bridge Construction</h3>
+            <p>End-to-end engineering, fabrication, and erection of vehicular and pedestrian bridges designed for extreme load-bearing capacity and longevity.</p>
+            <a href="#case" class="yellow-link">View Case Studies →</a>
+          </div>
+          <div class="bridge-img-box img-bridge"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Initiate Contact Section -->
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Initiate Contact</h2>
+          <p class="section-sub">For project inquiries, RFPs, or technical consultations, submit your details to our engineering coordination desk.</p>
+
+          <div class="contact-methods">
+            <div class="method-item">
+              <span class="method-icon">📍</span>
+              <div>
+                <strong>Headquarters</strong>
+                <p>Zona Industrial, Bogotá, Colombia</p>
+              </div>
+            </div>
+            <div class="method-item">
+              <span class="method-icon">✉️</span>
+              <div>
+                <strong>Engineering Desk</strong>
+                <p>proyectos@todometal.com.co</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-box">
+          <form id="contact-form" onsubmit="event.preventDefault(); alert('Petición recibida por la mesa técnica.');">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Company / Facility</label>
+                <input type="text" placeholder="Gobernación / Constructora" required>
+              </div>
+              <div class="form-group">
+                <label>Contact Name</label>
+                <input type="text" placeholder="Ing. Roberto Martínez" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Project Scope</label>
+              <select required>
+                <option value="metallic">Metallic Structures</option>
+                <option value="bridge">Bridge Construction</option>
+                <option value="montage">Industrial Montages</option>
+                <option value="postventa">Inspection / Post-Sales</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Message</label>
+              <textarea rows="4" placeholder="Briefly describe project requirements..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-yellow btn-full">Submit Request</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <div class="footer-brand">
+        <span class="footer-logo">TODO METAL <strong>SAS</strong></span>
+      </div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">ISO Certifications</a>
+      </div>
+      <div class="footer-copy">
+        © 2026 TODO METAL SAS. PRECISION ENGINEERING.
+      </div>
+    </div>
+  </footer>
+
+  <!-- PQRS WIDGET INTEGRATION FOR TENANT B -->
+  <script src="/widget/pqrs-widget.js?v=3" data-tenant="pk_live_todometal_67890"></script>
+</body>
+</html>
