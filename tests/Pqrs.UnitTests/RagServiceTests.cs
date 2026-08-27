@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Pgvector;
+using Pqrs.Application.Interfaces;
+using Pqrs.Application.Services;
+using Pqrs.Domain.Entities;
+using Pqrs.Domain.Interfaces;
+using Pqrs.Infrastructure;
+using Pqrs.Infrastructure.Persistence;
+using Pqrs.Infrastructure.Services;
+using Xunit;
+
+namespace Pqrs.UnitTests;
+
+public class RagServiceTests
+{
+    private PqrsDbContext GetInMemoryDbContext(string dbName, ITenantContext tenantContext)
+    {
+        var options = new DbContextOptionsBuilder<PqrsDbContext>()
+            .UseInMemoryDatabase(databaseName: dbName)
+            .Options;
+        return new PqrsDbContext(options, tenantContext);
+    }
+
+    [Fact]
+    public async Task SearchAndAnswerAsync_WhenScoreBelowThreshold_ReturnsResolvedFalse()
+    {
+        var tenantId = Guid.NewGuid();
+        var tenantContext = new TenantContext();
+        tenantContext.SetTenantId(tenantId);
+
+        using var dbContext = GetInMemoryDbContext(Guid.NewGuid().ToString(), tenantContext);
+        var httpClient = new System.Net.Http.HttpClient();
+        var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build();
+        var aiService = new AiService(config, httpClient);
+
+        var articleEmbedding = await aiService.GenerateEmbeddingAsync("Politica de entregas de productos de la granja");
+        dbContext.KnowledgeBaseArticles.Add(new KnowledgeBaseArticle
+        {
+            Id = Guid.NewGuid(),
+            TenantId = tenantId,
+            Title = "Entregas",
+            Content = "Entregamos de 6am a 2pm",
+            Embedding = new Vector(articleEmbedding),
+            IsActive = true
+        });
+        await dbContext.SaveChangesAsync();
+
+        var ragService = new RagService(dbContext, aiService);
+
+        var result = await ragService.SearchAndAnswerAsync("Pregunta completamente irrelevante sin sentido xyz123", tenantId, threshold: 0.99);
+
+        Assert.False(result.Resolved);
+        Assert.Null(result.Answer);
+        Assert.Empty(result.Sources);
+    }
+
+    [Fact]
+    public async Task SearchAndAnswerAsync_WhenScoreAboveThreshold_ReturnsResolvedTrueAndAnswer()
+    {
+        var tenantId = Guid.NewGuid();
+        var tenantContext = new TenantContext();
+        tenantContext.SetTenantId(tenantId);
+
+        using var dbContext = GetInMemoryDbContext(Guid.NewGuid().ToString(), tenantContext);
+        var httpClient = new System.Net.Http.HttpClient();
+        var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build();
+        var aiService = new AiService(config, httpClient);
+
+        var text = "Horarios de entrega y cobertura de Leggumbres La Escoba";
+        var articleEmbedding = await aiService.GenerateEmbeddingAsync(text);
+        dbContext.KnowledgeBaseArticles.Add(new KnowledgeBaseArticle
+        {
+            Id = Guid.NewGuid(),
+            TenantId = tenantId,
+            Title = "Horarios de entrega",
+            Content = "Horarios de 6:00 AM a 2:00 PM de lunes a sabado.",
+            Embedding = new Vector(articleEmbedding),
+            IsActive = true
+        });
+        await dbContext.SaveChangesAsync();
+
+        var ragService = new RagService(dbContext, aiService);
+
+        var result = await ragService.SearchAndAnswerAsync(text, tenantId, threshold: 0.50);
+
+        Assert.True(result.Resolved);
+        Assert.NotNull(result.Answer);
+        Assert.NotEmpty(result.Sources);
+    }
+}

@@ -1,0 +1,12 @@
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\bin\Debug\net10.0\Pqrs.Domain.deps.json
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\bin\Debug\net10.0\Pqrs.Domain.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\bin\Debug\net10.0\Pqrs.Domain.pdb
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.csproj.AssemblyReference.cache
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.AssemblyInfoInputs.cache
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.AssemblyInfo.cs
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.csproj.CoreCompileInputs.cache
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\refint\Pqrs.Domain.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\Pqrs.Domain.pdb
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Domain\obj\Debug\net10.0\ref\Pqrs.Domain.dll

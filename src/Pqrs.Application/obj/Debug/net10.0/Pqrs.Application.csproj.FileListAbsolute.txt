@@ -1,0 +1,15 @@
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.csproj.AssemblyReference.cache
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.AssemblyInfoInputs.cache
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.AssemblyInfo.cs
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.csproj.CoreCompileInputs.cache
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\bin\Debug\net10.0\Pqrs.Application.deps.json
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\bin\Debug\net10.0\Pqrs.Application.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\bin\Debug\net10.0\Pqrs.Application.pdb
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\bin\Debug\net10.0\Pqrs.Domain.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\bin\Debug\net10.0\Pqrs.Domain.pdb
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.App.38633CA2.Up2Date
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\refint\Pqrs.Application.dll
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\Pqrs.Application.pdb
+C:\Users\moren\OneDrive\Documents\riwi\C#\Empleavilidad\src\Pqrs.Application\obj\Debug\net10.0\ref\Pqrs.Application.dll

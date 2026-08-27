@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: pqrs_postgres
+    environment:
+      POSTGRES_DB: pqrs_saas_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pqrs_saas_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pqrs_api
+    ports:
+      - "5000:8080"
+    environment:
+      - ConnectionStrings__Default=Host=postgres;Port=5432;Database=pqrs_saas_db;Username=postgres;Password=postgres
+      - Jwt__Secret=SuperSecretKey_For_PQRS_SaaS_Platform_1234567890!
+      - Jwt__Issuer=PqrsApi
+      - Jwt__Audience=PqrsWidget
+      - AI__ApiKey=
+      - AI__ChatModel=gpt-4o-mini
+      - AI__EmbeddingModel=text-embedding-3-small
+      - Rag__SimilarityThreshold=0.78
+      - Rag__TopK=5
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
