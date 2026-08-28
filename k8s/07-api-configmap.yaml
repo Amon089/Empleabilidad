@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pqrs-api-configmap
+  namespace: pqrs-saas
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ConnectionStrings__DefaultConnection: "Host=pqrs-postgres-service;Port=5432;Database=pqrs_saas_db;Username=pqrs_user;Password=PqrsSecurePassword123!"
+  AI__Provider: "gemini"
+  AI__ChatModel: "gemini-3.5-flash"
+  AI__EmbeddingModel: "text-embedding-004"
+  Jwt__Issuer: "PqrsSaaS"
+  Jwt__Audience: "PqrsSaaSUsers"

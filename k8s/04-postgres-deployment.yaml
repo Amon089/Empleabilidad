@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pqrs-postgres-deployment
+  namespace: pqrs-saas
+  labels:
+    app: pqrs-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pqrs-postgres
+  template:
+    metadata:
+      labels:
+        app: pqrs-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: ankane/pgvector:v0.8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              name: postgres
+          envFrom:
+            - secretRef:
+                name: pqrs-postgres-secret
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: pqrs-postgres-pvc

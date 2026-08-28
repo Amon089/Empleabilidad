@@ -9,8 +9,6 @@
 </head>
 <body>
 
-
-
   <!-- Header / Navigation -->
   <header class="navbar">
     <div class="container nav-container">
@@ -34,9 +32,6 @@
         <button class="cart-btn" onclick="openCartModal()">
           🛒 Shop Now <span class="cart-count" id="cart-count">0</span>
         </button>
-        <div id="auth-nav-container">
-          <button class="btn btn-outline" onclick="openAuthModal('login')">Iniciar Sesión</button>
-        </div>
       </div>
     </div>
   </header>
@@ -50,7 +45,7 @@
       <div class="hero-section">
         <div class="container hero-container">
           <div class="hero-text">
-            <span class="hero-badge">👨‍🌾 100% Organically Cultivated</span>
+            <span class="hero-badge">🌿 100% ORGANIC & LOCAL FARMERS</span>
             <h1>Fresh from the Farm to Your Table</h1>
             <p>Carefully cultivated crops, harvested at peak freshness. Our commitment to quality starts in the soil.</p>
             <div class="hero-buttons">
@@ -58,218 +53,149 @@
             </div>
           </div>
           <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=800&auto=format&fit=crop&q=60" alt="Fresh farm harvest">
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&auto=format&fit=crop&q=60" alt="Fresh organic vegetables basket">
           </div>
         </div>
       </div>
 
-      <!-- Value Props / Core Values -->
+      <!-- Feature Grid: Fresh Harvest -->
       <div class="container section-padding">
         <div class="section-title text-center">
-          <h2>Our Harvest & Core Values</h2>
-          <p>Direct partnerships with smallholder farmers guaranteeing peak nutrition and freshness</p>
+          <h2>Our Fresh Harvest</h2>
+          <p>Hand-picked fruits and vegetables from Colombian smallholder farmers</p>
         </div>
-        <div class="grid grid-3">
-          <div class="card prop-card text-center">
-            <div class="prop-icon">🌾</div>
-            <h3>Fair Trade Agriculture</h3>
-            <p>We source directly from local farm families without middleman price speculation.</p>
-          </div>
-          <div class="card prop-card text-center">
-            <div class="prop-icon">🚛</div>
-            <h3>Direct Same-Day Delivery</h3>
-            <p>Daily morning dispatches or zero-cost pickup at Central Hub Depot 12.</p>
-          </div>
-          <div class="card prop-card text-center">
-            <div class="prop-icon">🛡️</div>
-            <h3>Quality Guarantee & PQRS</h3>
-            <p>100% satisfaction guarantee. If any produce fails quality standards, we replace it instantly.</p>
-          </div>
+        <div class="grid grid-3" id="home-catalog-grid">
+          <!-- Rendered dynamically -->
         </div>
       </div>
 
-      <!-- From Seed to Kitchen 3-Step Process -->
-      <div id="sec-how" class="bg-light section-padding">
+      <!-- Section: From Seed to Kitchen -->
+      <div class="bg-light section-padding" id="sec-how">
         <div class="container">
           <div class="section-title text-center">
             <h2>From Seed to Kitchen</h2>
-            <p>Our process is simple, transparent, and focused entirely on quality</p>
+            <p>A transparent supply chain prioritizing fair trade and zero chemical waste</p>
           </div>
-          <div class="steps-grid">
-            <div class="step-card">
+          <div class="grid grid-3 steps-grid">
+            <div class="step-card card">
               <span class="step-num">1</span>
-              <h4>Sustainable Farming</h4>
-              <p>Crops nurtured using eco-friendly practices in local soil.</p>
+              <h4>Cultivated with Care</h4>
+              <p>Sourced from sustainable family farms using natural soil enrichment.</p>
             </div>
-            <div class="step-card">
+            <div class="step-card card">
               <span class="step-num">2</span>
-              <h4>Peak Harvest</h4>
-              <p>Hand-picked at exact ripeness for maximum flavor.</p>
+              <h4>Same-Day Harvesting</h4>
+              <p>Products harvested early morning and prepped in Bodega 12 Central Hub.</p>
             </div>
-            <div class="step-card">
+            <div class="step-card card">
               <span class="step-num">3</span>
-              <h4>Direct Delivery</h4>
-              <p>Handled with care straight from the farm to your kitchen table.</p>
+              <h4>Express Home Delivery</h4>
+              <p>Direct temperature-controlled delivery to your kitchen counter.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Farmers Section -->
-      <div id="sec-farmers" class="container section-padding">
+      <!-- Section: Meet Our Local Farmers -->
+      <div class="container section-padding" id="sec-farmers">
         <div class="section-title text-center">
-          <h2>Meet Our Farmers</h2>
-          <p>Dedicated growers bringing authentic farm produce to your family</p>
+          <h2>Meet Our Local Farmers</h2>
+          <p>Supporting rural families and sustainable agriculture in Boyacá and Cundinamarca</p>
         </div>
-        <div class="grid grid-2" id="farmers-container">
-          <!-- Rendered dynamically -->
+        <div class="grid grid-2 farmers-grid">
+          <div class="card farmer-card">
+            <img src="https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?w=600&auto=format&fit=crop&q=60" alt="Farmer Don José">
+            <div class="farmer-info">
+              <h3>Don José & Family</h3>
+              <span class="badge badge-success">Organic Avocado & Potato Producer</span>
+              <p>"Working with Leggumbres La Escoba allows us to sell at fair prices without aggressive middlemen."</p>
+            </div>
+          </div>
+          <div class="card farmer-card">
+            <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&auto=format&fit=crop&q=60" alt="Doña Rosa">
+            <div class="farmer-info">
+              <h3>Doña Rosa María</h3>
+              <span class="badge badge-success">Fresh Herbs & Greens Specialist</span>
+              <p>"Our crops are watered with pure mountain streams and harvested by hand every morning."</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- VIEW 2: CATALOG -->
+    <!-- VIEW 2: FULL CATALOG -->
     <section id="view-catalog" class="view-section">
       <div class="container section-padding">
         <div class="catalog-header">
           <div>
-            <h2>Farm to Table Product Catalog</h2>
-            <p>Fresh organic produce updated daily</p>
+            <h2>Farm-to-Table Catalog</h2>
+            <p>Select your organic products for home delivery or Central Hub pickup</p>
           </div>
-          <div class="catalog-search-box">
-            <input type="text" id="catalog-search" placeholder="🔍 Search potatoes, avocados, plantains..." oninput="filterCatalog()">
+          <div class="catalog-filters">
+            <button class="filter-chip active" onclick="filterCatalog('ALL')">All Products</button>
+            <button class="filter-chip" onclick="filterCatalog('Verduras')">Verduras & Papas</button>
+            <button class="filter-chip" onclick="filterCatalog('Frutas')">Frutas</button>
+            <button class="filter-chip" onclick="filterCatalog('Granos')">Granos & Legumbres</button>
           </div>
         </div>
-
-        <!-- Categories Filter -->
-        <div class="category-pills" id="category-pills">
-          <!-- Rendered dynamically -->
-        </div>
-
-        <!-- Products Grid -->
-        <div class="grid grid-4" id="products-grid">
+        <div class="grid grid-4" id="full-catalog-grid">
           <!-- Rendered dynamically -->
         </div>
       </div>
     </section>
 
-    <!-- VIEW 3: CUSTOMER PORTAL -->
-    <section id="view-customer" class="view-section">
-      <div class="container section-padding">
-        <div class="portal-header">
-          <div>
-            <h2>My Customer Account & Orders</h2>
-            <p id="customer-welcome-msg">Welcome to your organic farm portal</p>
-          </div>
-          <button class="btn btn-outline-danger" onclick="logoutUser()">🚪 Log Out</button>
-        </div>
-
-        <div class="portal-tabs">
-          <button class="tab-btn active" onclick="switchPortalTab('orders')">📦 My Orders</button>
-          <button class="tab-btn" onclick="switchPortalTab('pqrs')">📝 My PQRS</button>
-          <button class="tab-btn" onclick="switchPortalTab('profile')">👤 My Profile</button>
-        </div>
-
-        <!-- Tab 1: Orders -->
-        <div id="tab-orders" class="portal-tab-content active">
-          <h3>Demo Order History</h3>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Date</th>
-                  <th>Produce Items</th>
-                  <th>Fulfillment</th>
-                  <th>Total</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="customer-orders-tbody">
-                <!-- Rendered dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Tab 2: PQRS -->
-        <div id="tab-pqrs" class="portal-tab-content">
-          <div class="tab-title-bar">
-            <h3>My PQRS Tickets</h3>
-            <button class="btn btn-primary btn-sm" onclick="switchView('pqrs')">+ New PQRS</button>
-          </div>
-          <div id="customer-pqrs-list">
-            <div class="empty-state">
-              <p>No PQRS tickets logged in this session.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab 3: Profile -->
-        <div id="tab-profile" class="portal-tab-content">
-          <h3>Customer Account Profile</h3>
-          <div class="profile-card card">
-            <p><strong>Full Name:</strong> <span id="prof-name">Loading...</span></p>
-            <p><strong>Email Address:</strong> <span id="prof-email">Loading...</span></p>
-            <p><strong>System Role:</strong> <span class="badge badge-info">Registered Customer</span></p>
-            <p><strong>Default Address:</strong> Calle 45 # 12-34 (Demo Address)</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- VIEW 4: PUBLIC PQRS -->
+    <!-- VIEW 3: PUBLIC PQRS -->
     <section id="view-pqrs" class="view-section">
       <div class="container section-padding">
         <div class="pqrs-box card">
           <h2>Radicar PQRS - Leggumbres La Escoba</h2>
-          <p>Submit inquiries, complaints, claims, or congratulations to our farm customer support team.</p>
+          <p>Oficializa tus peticiones, quejas, reclamos o sugerencias. La IA responderá o canalizará tu solicitud inmediatamente.</p>
 
           <form id="pqrs-form" onsubmit="handlePqrsSubmit(event)">
             <div class="form-group">
-              <label>PQRS Type *</label>
+              <label>Tipo de Solicitud *</label>
               <select id="pqrs-type" required>
-                <option value="PETITION">Petition Inquiry</option>
-                <option value="COMPLAINT">Complaint (Delivery Delay)</option>
-                <option value="CLAIM">Claim (Bruised or Missing Produce)</option>
-                <option value="SOLICITUDE">Wholesale Solicitude</option>
-                <option value="CONGRATULATION">Farmer Congratulation</option>
+                <option value="PETITION">Petición / Consulta Comercial</option>
+                <option value="COMPLAINT">Queja (Retraso en Domicilio)</option>
+                <option value="CLAIM">Reclamo (Producto Magullado / Mal Estado)</option>
+                <option value="SOLICITUDE">Solicitud de Pedido Especial</option>
+                <option value="CONGRATULATION">Felicitación al Productor</option>
               </select>
             </div>
 
             <div class="form-row grid grid-2">
               <div class="form-group">
-                <label>Contact Name *</label>
-                <input type="text" id="pqrs-name" placeholder="Full Name" required>
+                <label>Nombre Completo *</label>
+                <input type="text" id="pqrs-name" placeholder="Tu Nombre" required>
               </div>
               <div class="form-group">
-                <label>Contact Email *</label>
-                <input type="email" id="pqrs-email" placeholder="email@example.com" required>
+                <label>Correo Electrónico *</label>
+                <input type="email" id="pqrs-email" placeholder="correo@ejemplo.com" required>
               </div>
             </div>
 
             <div class="form-group">
-              <label>Subject *</label>
-              <input type="text" id="pqrs-subject" placeholder="e.g. Inquiry about organic certification" required>
+              <label>Asunto *</label>
+              <input type="text" id="pqrs-subject" placeholder="Ej: Estado de las fresas en el último pedido" required>
             </div>
 
             <div class="form-group">
-              <label>Detailed Description *</label>
-              <textarea id="pqrs-description" rows="4" placeholder="Describe your inquiry..." required></textarea>
+              <label>Descripción Detallada *</label>
+              <textarea id="pqrs-description" rows="4" placeholder="Describe claramente tu caso..." required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-pqrs">📩 Submit PQRS Ticket</button>
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-pqrs">📩 Enviar PQRS Oficial</button>
           </form>
 
           <div id="pqrs-success-card" class="success-card hidden text-center">
             <div class="success-icon">✅</div>
-            <h3>PQRS Ticket Submitted!</h3>
-            <p>Your request has been logged into the Multi-Tenant SaaS platform.</p>
+            <h3>¡PQRS Radicada Exitosamente!</h3>
+            <p>Tu solicitud fue procesada y canalizada.</p>
             <div class="radicado-box">
-              <span>Radicado Reference:</span>
+              <span>Número de Radicado:</span>
               <strong id="radicado-number">PQRS-00000</strong>
             </div>
-            <button class="btn btn-outline" onclick="resetPqrsForm()">Submit Another Ticket</button>
+            <button class="btn btn-outline" onclick="resetPqrsForm()">Radicar Otra PQRS</button>
           </div>
         </div>
       </div>
@@ -277,109 +203,28 @@
 
   </main>
 
-  <!-- MODALS -->
-
-  <!-- Modal 1: Cart -->
+  <!-- CART MODAL -->
   <div id="modal-cart" class="modal-backdrop hidden" onclick="closeCartModal(event)">
-    <div class="modal-card modal-cart-card" onclick="event.stopPropagation()">
+    <div class="modal-card" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <h3>🛒 Organic Shopping Cart</h3>
+        <h3>🛒 Tu Canasta Campesina</h3>
         <button class="close-btn" onclick="closeCartModal()">&times;</button>
       </div>
       <div class="modal-body">
         <div id="cart-items-container">
           <!-- Rendered dynamically -->
         </div>
+        <div class="cart-summary" style="margin-top:16px; padding-top:16px; border-top:1px solid #e2e8f0;">
+          <div style="display:flex; justify-space-between; font-weight:700; font-size:1.1rem;">
+            <span>Total:</span>
+            <span id="cart-total-price">$0 COP</span>
+          </div>
+          <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">Tarifa plana de envío a domicilio: $4,500 COP (O gratis en Bodega 12)</p>
+        </div>
       </div>
       <div class="modal-footer">
-        <div class="cart-summary-line">
-          <span>Subtotal Produce:</span>
-          <strong id="cart-subtotal">$0</strong>
-        </div>
-        <button class="btn btn-primary btn-block" onclick="openCheckoutModal()">Proceed to Order Checkout ➔</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 2: Checkout -->
-  <div id="modal-checkout" class="modal-backdrop hidden" onclick="closeCheckoutModal(event)">
-    <div class="modal-card" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h3>📦 Demo Order Confirmation</h3>
-        <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="checkout-form" onsubmit="processCheckout(event)">
-          <div class="form-group">
-            <label>Recipient Name *</label>
-            <input type="text" id="chk-name" required placeholder="Full Name">
-          </div>
-          <div class="form-group">
-            <label>Delivery Address *</label>
-            <input type="text" id="chk-address" required placeholder="Street / Apartment">
-          </div>
-          <div class="form-group">
-            <label>Fulfillment Method *</label>
-            <select id="chk-delivery" onchange="updateCheckoutTotal()">
-              <option value="domicilio">Same-Day Home Delivery ($4,500)</option>
-              <option value="recogida">Central Depot Pickup (Free - Depot 12)</option>
-            </select>
-          </div>
-          <div class="checkout-total-box card">
-            <div><span>Total Amount Demo:</span> <strong id="chk-total-amount">$0</strong></div>
-            <small class="text-muted">* Simulated demo checkout flow.</small>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">💳 Simulate Payment & Place Order</button>
-        </form>
-
-        <div id="checkout-success" class="hidden text-center">
-          <div class="success-icon">🎉</div>
-          <h3>Order Placed Successfully!</h3>
-          <p>Your harvest order has been queued at the Leggumbres Central Hub.</p>
-          <p><strong>Order ID:</strong> <span id="chk-ped-id">PED-0000</span></p>
-          <button class="btn btn-primary" onclick="finishCheckout()">View My Orders</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 3: Auth -->
-  <div id="modal-auth" class="modal-backdrop hidden" onclick="closeAuthModal(event)">
-    <div class="modal-card modal-sm" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h3 id="auth-title">Customer Log In</h3>
-        <button class="close-btn" onclick="closeAuthModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="login-form" onsubmit="handleLoginSubmit(event)">
-          <div class="form-group">
-            <label>Email Address *</label>
-            <input type="email" id="login-email" required placeholder="customer@example.com">
-          </div>
-          <div class="form-group">
-            <label>Password *</label>
-            <input type="password" id="login-pass" required placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Log In to Account</button>
-          <p class="auth-toggle-text">No account? <a href="#" onclick="toggleAuthMode('register')">Register here</a></p>
-        </form>
-
-        <form id="register-form" class="hidden" onsubmit="handleRegisterSubmit(event)">
-          <div class="form-group">
-            <label>Full Name *</label>
-            <input type="text" id="reg-name" required placeholder="Your name">
-          </div>
-          <div class="form-group">
-            <label>Email Address *</label>
-            <input type="email" id="reg-email" required placeholder="email@example.com">
-          </div>
-          <div class="form-group">
-            <label>Password *</label>
-            <input type="password" id="reg-pass" required placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Create Demo Account</button>
-          <p class="auth-toggle-text">Have account? <a href="#" onclick="toggleAuthMode('login')">Log in</a></p>
-        </form>
+        <button class="btn btn-outline" onclick="closeCartModal()">Seguir Comprando</button>
+        <button class="btn btn-primary" onclick="checkoutCart()">Finalizar Pedido Directo</button>
       </div>
     </div>
   </div>
@@ -389,11 +234,11 @@
     <div class="container footer-container">
       <div>
         <h4>🌱 Leggumbres La Escoba</h4>
-        <p>Direct farm-to-table organic produce centralizing smallholder crops.</p>
+        <p>Conectando campesinos colombianos directamente con tu hogar.</p>
       </div>
       <div>
-        <h4>Support & PQRS</h4>
-        <p>Customer support powered by Multi-Tenant SaaS Platform.</p>
+        <h4>Soporte & PQRS</h4>
+        <p>Centro de Acopio Central - Bodega 12. Atención 6:00 AM - 4:00 PM.</p>
         <button class="btn btn-outline-light btn-sm" onclick="switchView('pqrs')">Radicar PQRS</button>
       </div>
     </div>
@@ -401,7 +246,6 @@
 
   <!-- Scripts -->
   <script src="../demo-data/leggumbres.js"></script>
-  <script src="../shared/auth.js"></script>
   <script src="../shared/api.js"></script>
 
   <!-- EMBEDDED WIDGET PQRS -->

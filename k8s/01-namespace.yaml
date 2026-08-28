@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pqrs-saas
+  labels:
+    name: pqrs-saas
+    app.kubernetes.io/name: pqrs-saas-platform

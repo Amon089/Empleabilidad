@@ -3,7 +3,8 @@
 Sistema completo SaaS multi-tenant compuesto por un **Backend en ASP.NET Core (.NET 10)** con **PostgreSQL + pgvector**, **Widget reutilizable en Vanilla JS + Shadow DOM**, **2 Sitios Web de Demostración** con diseño profesional y un **Dashboard de Gestión Multi-Tenant con Notificaciones SignalR en tiempo real**.
 
 Para ver las instrucciones detalladas paso a paso sobre cómo probar cada flujo, consulta la [📖 Guía de Uso Completa (COMO_USAR.md)](file:///c:/Users/moren/OneDrive/Documents/riwi/C%23/Empleavilidad/COMO_USAR.md).  
-Para aprender a registrar nuevas empresas y pegar el widget en otros sitios web, consulta la [🏢 Guía de Creación de Tenants e Incrustación de Widget (GUIA_NUEVO_TENANT_Y_WIDGET.md)](file:///c:/Users/moren/OneDrive/Documents/riwi/C%23/Empleavilidad/GUIA_NUEVO_TENANT_Y_WIDGET.md).
+Para aprender a registrar nuevas empresas y pegar el widget en otros sitios web, consulta la [🏢 Guía de Creación de Tenants e Incrustación de Widget (GUIA_NUEVO_TENANT_Y_WIDGET.md)](file:///c:/Users/moren/OneDrive/Documents/riwi/C%23/Empleavilidad/GUIA_NUEVO_TENANT_Y_WIDGET.md).  
+Para desplegar la infraestructura en un clúster de Kubernetes, consulta la [☸️ Guía Completa de Despliegue en Kubernetes (GUIA_DESPLIEGUE_KUBERNETES.md)](file:///c:/Users/moren/OneDrive/Documents/riwi/C%23/Empleavilidad/GUIA_DESPLIEGUE_KUBERNETES.md).
 
 ---
 

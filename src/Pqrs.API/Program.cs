@@ -169,12 +169,19 @@ app.UseRateLimiter();
 app.MapControllers();
 app.MapHub<NotificationsHub>("/api/v1/hubs/notifications");
 
-// Database Seed on Startup
+// Health Check endpoint for Kubernetes Liveness and Readiness probes
+app.MapGet("/health", () => Results.Ok(new { status = "Healthy", timestamp = DateTime.UtcNow, service = "PQRS SaaS API" }));
+
+// Database Seed and Auto-Creation on Startup
 using (var scope = app.Services.CreateScope())
 {
     try
     {
         var db = scope.ServiceProvider.GetRequiredService<PqrsDbContext>();
+        if (!useInMemory)
+        {
+            await db.Database.EnsureCreatedAsync();
+        }
         var aiService = scope.ServiceProvider.GetRequiredService<IAiService>();
         await DbInitializer.SeedAsync(db, aiService);
     }

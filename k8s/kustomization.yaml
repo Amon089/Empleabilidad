@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: pqrs-saas
+
+resources:
+  - 01-namespace.yaml
+  - 02-postgres-secret.yaml
+  - 03-postgres-pvc.yaml
+  - 04-postgres-deployment.yaml
+  - 05-postgres-service.yaml
+  - 06-api-secret.yaml
+  - 07-api-configmap.yaml
+  - 08-api-deployment.yaml
+  - 09-api-service.yaml
+  - 10-api-hpa.yaml
+  - 11-ingress.yaml
