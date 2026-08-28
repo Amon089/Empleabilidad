@@ -3,172 +3,299 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo Metal SAS | Engineering the Future of Infrastructure</title>
+  <title>TODO METAL SAS | Industrial Precision & Infrastructure</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Dark Header -->
-  <header class="header">
+
+
+
+  <!-- Corporate Header -->
+  <header class="navbar">
     <div class="container nav-container">
-      <div class="logo">
+      <a href="#" class="brand-logo" onclick="switchView('home')">
         <span class="logo-icon">🏗️</span>
-        <span class="logo-text">TODO METAL <strong>SAS</strong></span>
-      </div>
-      <nav class="nav-links">
-        <a href="#capabilities" class="active">Capabilities</a>
-        <a href="#projects">Projects</a>
-        <a href="#services">Services</a>
-        <a href="#engineering">Engineering</a>
-        <a href="#quality">Quality</a>
-        <a href="#contact">Contact</a>
+        <div class="logo-text">
+          <span class="brand-name">TODO METAL <span>SAS</span></span>
+          <span class="brand-sub">INDUSTRIAL PRECISION & ENGINEERING</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#home" class="nav-link active" onclick="switchView('home')">Capabilities</a>
+        <a href="#services" class="nav-link" onclick="switchView('services')">Services</a>
+        <a href="#projects" class="nav-link" onclick="switchView('projects')">Projects</a>
+        <a href="#quote" class="nav-link highlight" onclick="switchView('quote')">📐 Request Quote</a>
+        <a href="#pqrs" class="nav-link" onclick="switchView('pqrs')">PQRS</a>
       </nav>
-      <button class="btn btn-yellow" onclick="alert('Solicitud de Cotización Técnica')">Request Quote</button>
+
+      <div class="nav-actions">
+        <button class="btn btn-primary" onclick="switchView('quote')">Request Quote</button>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-      <div class="hero-badge">✦ PRECISION ENGINEERING</div>
-      <h1>Engineering the Future of Infrastructure</h1>
-      <p>Advanced metallic structures, bridge construction, and heavy industrial montages designed for maximum durability and structural integrity.</p>
-      <div class="hero-btns">
-        <a href="#capabilities" class="btn btn-yellow">Explore Capabilities</a>
-        <a href="#contact" class="btn btn-dark-outline">Contact Engineering</a>
-      </div>
-    </div>
-  </section>
+  <!-- MAIN CONTENT VIEWS -->
+  <main class="main-content">
 
-  <!-- Core Capabilities Section -->
-  <section id="capabilities" class="section bg-dark">
-    <div class="container">
-      <div class="section-title-wrap">
-        <div>
+    <!-- VIEW 1: HOME -->
+    <section id="view-home" class="view-section active">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="container hero-container">
+          <div class="hero-text">
+            <span class="hero-badge">⚡ PRECISION ENGINEERING & NSR-10</span>
+            <h1>Engineering the Future of Infrastructure</h1>
+            <p>Advanced metallic structures, bridge construction, and heavy industrial montages designed for maximum durability and structural integrity.</p>
+            <div class="hero-buttons">
+              <button class="btn btn-primary btn-lg" onclick="switchView('quote')">Explore Capabilities</button>
+            </div>
+          </div>
+          <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=800&auto=format&fit=crop&q=60" alt="Heavy steel structure construction">
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Capabilities Grid -->
+      <div class="container section-padding">
+        <div class="section-title text-center">
           <h2>Core Capabilities</h2>
-          <p class="section-sub">Technical specifications and structural discipline ensuring long-scale industrial deployments.</p>
+          <p>Technical specifications and structural discipline executing large-scale industrial requirements</p>
+        </div>
+        <div class="grid grid-2" id="home-services-grid">
+          <!-- Rendered dynamically -->
         </div>
       </div>
 
-      <div class="capabilities-grid">
-        <!-- Metallic Structures Main Card -->
-        <div class="cap-card card-main">
-          <div class="card-bg-img img-steel"></div>
-          <div class="card-gradient"></div>
-          <div class="card-content-overlay">
-            <span class="yellow-tag">HEAVY FABRICATION</span>
-            <h3>Metallic Structures</h3>
-            <p>Custom fabrication of heavy-duty steel frameworks for commercial and industrial facilities. Utilizing advanced CAD modeling and CNC machining for precision tolerances.</p>
+      <!-- Process Section -->
+      <div class="bg-dark section-padding text-white">
+        <div class="container">
+          <div class="section-title text-center text-white">
+            <h2>Industrial Workflow</h2>
+            <p>Rigor and compliance from 3D BIM modeling to final site installation</p>
           </div>
-        </div>
-
-        <!-- Industrial Montages Card -->
-        <div class="cap-card card-dark-info">
-          <div class="info-icon-badge">⚙️</div>
-          <h3>Industrial Montages</h3>
-          <p>Rapid assembly and installation of complex industrial machinery and plant infrastructure.</p>
-          <ul class="spec-list">
-            <li><span>•</span> Plant Relocation</li>
-            <li><span>•</span> Heavy Equipment Rigging</li>
-            <li><span>•</span> Process Piping Assembly</li>
-          </ul>
-        </div>
-
-        <!-- Bridge Construction Card -->
-        <div class="cap-card card-bridge">
-          <div class="bridge-content">
-            <span class="yellow-tag">INFRASTRUCTURE</span>
-            <h3>Bridge Construction</h3>
-            <p>End-to-end engineering, fabrication, and erection of vehicular and pedestrian bridges designed for extreme load-bearing capacity and longevity.</p>
-            <a href="#case" class="yellow-link">View Case Studies →</a>
+          <div class="grid grid-4 steps-dark-grid">
+            <div class="step-dark-card">
+              <span class="step-num">1</span>
+              <h4>BIM 3D Modeling</h4>
+              <p>Tekla & Revit detail engineering for zero site collisions.</p>
+            </div>
+            <div class="step-dark-card">
+              <span class="step-num">2</span>
+              <h4>Shop Fabrication</h4>
+              <p>AWS D1.1 certified welding with dye penetrant & ultrasound NDT testing.</p>
+            </div>
+            <div class="step-dark-card">
+              <span class="step-num">3</span>
+              <h4>Heavy Erection</h4>
+              <p>Safe crane lifting with certified Rigger rigging plans.</p>
+            </div>
+            <div class="step-dark-card">
+              <span class="step-num">4</span>
+              <h4>10-Yr Guarantee</h4>
+              <p>Official structural warranty compliant with Law 1796.</p>
+            </div>
           </div>
-          <div class="bridge-img-box img-bridge"></div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Initiate Contact Section -->
-  <section id="contact" class="section">
-    <div class="container">
-      <div class="contact-grid">
-        <div class="contact-info">
-          <h2>Initiate Contact</h2>
-          <p class="section-sub">For project inquiries, RFPs, or technical consultations, submit your details to our engineering coordination desk.</p>
-
-          <div class="contact-methods">
-            <div class="method-item">
-              <span class="method-icon">📍</span>
-              <div>
-                <strong>Headquarters</strong>
-                <p>Zona Industrial, Bogotá, Colombia</p>
-              </div>
-            </div>
-            <div class="method-item">
-              <span class="method-icon">✉️</span>
-              <div>
-                <strong>Engineering Desk</strong>
-                <p>proyectos@todometal.com.co</p>
-              </div>
-            </div>
-          </div>
+      <!-- Projects Highlight -->
+      <div class="container section-padding">
+        <div class="section-title text-center">
+          <h2>Featured Engineering Projects</h2>
+          <p>Public infrastructure and heavy industrial case studies</p>
         </div>
+        <div class="grid grid-3" id="home-projects-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
 
-        <div class="contact-form-box">
-          <form id="contact-form" onsubmit="event.preventDefault(); alert('Petición recibida por la mesa técnica.');">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Company / Facility</label>
-                <input type="text" placeholder="Gobernación / Constructora" required>
-              </div>
-              <div class="form-group">
-                <label>Contact Name</label>
-                <input type="text" placeholder="Ing. Roberto Martínez" required>
-              </div>
-            </div>
+    <!-- VIEW 2: SERVICES DETAIL -->
+    <section id="view-services" class="view-section">
+      <div class="container section-padding">
+        <div class="section-title">
+          <h2>Engineering Specifications</h2>
+          <p>Technical details for structural fabrication and erection lines</p>
+        </div>
+        <div class="grid grid-2" id="full-services-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
 
+    <!-- VIEW 3: PROJECTS PORTFOLIO -->
+    <section id="view-projects" class="view-section">
+      <div class="container section-padding">
+        <div class="section-title">
+          <h2>Project Portfolio Case Studies</h2>
+          <p>Representative steel structures, bridges, and infrastructure</p>
+        </div>
+        <div class="grid grid-3" id="full-projects-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: B2B QUOTE CALCULATOR -->
+    <section id="view-quote" class="view-section">
+      <div class="container section-padding">
+        <div class="quote-box card">
+          <div class="quote-header">
+            <h2>Initiate Contact & Engineering Quote</h2>
+            <p>For project inquiries, RFPs, or technical consultations, submit your details to our engineering coordination team.</p>
+          </div>
+
+          <form id="quote-form" onsubmit="handleQuoteSubmit(event)">
             <div class="form-group">
-              <label>Project Scope</label>
-              <select required>
-                <option value="metallic">Metallic Structures</option>
-                <option value="bridge">Bridge Construction</option>
-                <option value="montage">Industrial Montages</option>
-                <option value="postventa">Inspection / Post-Sales</option>
+              <label>Project Type *</label>
+              <select id="q-type" required>
+                <option value="Metallic Structures">Metallic Structures & Frameworks</option>
+                <option value="Bridge Construction">Bridge Construction (Vehicular / Pedestrian)</option>
+                <option value="Industrial Montages">Industrial Montages & Plant Machinery</option>
+                <option value="Civil Works">Civil Works & Deep Foundations</option>
               </select>
             </div>
 
-            <div class="form-group">
-              <label>Message</label>
-              <textarea rows="4" placeholder="Briefly describe project requirements..."></textarea>
+            <div class="form-row grid grid-2">
+              <div class="form-group">
+                <label>Company / Entity *</label>
+                <input type="text" id="q-company" placeholder="Solar Corp / Municipality" required>
+              </div>
+              <div class="form-group">
+                <label>Contact Name *</label>
+                <input type="text" id="q-name" placeholder="Jane Doe" required>
+              </div>
             </div>
 
-            <button type="submit" class="btn btn-yellow btn-full">Submit Request</button>
+            <div class="form-row grid grid-2">
+              <div class="form-group">
+                <label>Professional Email *</label>
+                <input type="email" id="q-email" placeholder="jane@solarcorp.com" required>
+              </div>
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" id="q-phone" placeholder="+57 300 000 0000" required>
+              </div>
+            </div>
+
+            <div class="form-row grid grid-2">
+              <div class="form-group">
+                <label>Project Location *</label>
+                <input type="text" id="q-location" placeholder="City / Industrial Zone" required>
+              </div>
+              <div class="form-group">
+                <label>Dimensions / Estimated Tonnage *</label>
+                <input type="text" id="q-dimensions" placeholder="e.g. 150 Tons steel or 3,000 m²" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Message & Technical Scope *</label>
+              <textarea id="q-desc" rows="4" placeholder="Briefly describe project requirements, steel grades, BIM specs..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-submit-quote">Submit Request</button>
           </form>
+
+          <div id="quote-success-card" class="success-card hidden text-center">
+            <div class="success-icon">🏗️</div>
+            <h3>Request Submitted Successfully!</h3>
+            <p>Our engineering team has received your technical specs.</p>
+            <div class="radicado-box">
+              <span>Request Reference Code:</span>
+              <strong id="quote-ref-number">COT-00000</strong>
+            </div>
+            <p><small>A resident engineer will follow up within 48 business hours.</small></p>
+            <button class="btn btn-outline" onclick="resetQuoteForm()">Submit Another Inquiry</button>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- VIEW 5: PUBLIC PQRS -->
+    <section id="view-pqrs" class="view-section">
+      <div class="container section-padding">
+        <div class="pqrs-box card">
+          <h2>Radicar PQRS - TODO METAL SAS</h2>
+          <p>Official channel for contractual inquiries, montage complaints, or engineering feedback.</p>
+
+          <form id="pqrs-form" onsubmit="handlePqrsSubmit(event)">
+            <div class="form-group">
+              <label>PQRS Type *</label>
+              <select id="pqrs-type" required>
+                <option value="PETITION">Petition / Follow-up Inquiry</option>
+                <option value="COMPLAINT">Complaint (Erection Schedule Delay)</option>
+                <option value="CLAIM">Technical Claim (Structure / Inspection)</option>
+                <option value="SOLICITUDE">Site Inspection Request</option>
+                <option value="CONGRATULATION">Resident Team Congratulation</option>
+              </select>
+            </div>
+
+            <div class="form-row grid grid-2">
+              <div class="form-group">
+                <label>Contact Name *</label>
+                <input type="text" id="pqrs-name" placeholder="Full Name" required>
+              </div>
+              <div class="form-group">
+                <label>Professional Email *</label>
+                <input type="email" id="pqrs-email" placeholder="email@company.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Subject *</label>
+              <input type="text" id="pqrs-subject" placeholder="e.g. Non-destructive testing report request for bridge" required>
+            </div>
+
+            <div class="form-group">
+              <label>Detailed Description *</label>
+              <textarea id="pqrs-description" rows="4" placeholder="Describe technical situation..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-pqrs">📩 Submit Corporate PQRS</button>
+          </form>
+
+          <div id="pqrs-success-card" class="success-card hidden text-center">
+            <div class="success-icon">✅</div>
+            <h3>PQRS Submitted Successfully!</h3>
+            <p>Your ticket has been routed to engineering management.</p>
+            <div class="radicado-box">
+              <span>Radicado Reference:</span>
+              <strong id="radicado-number">PQRS-00000</strong>
+            </div>
+            <button class="btn btn-outline" onclick="resetPqrsForm()">Submit Another PQRS</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="container footer-wrap">
-      <div class="footer-brand">
-        <span class="footer-logo">TODO METAL <strong>SAS</strong></span>
+    <div class="container footer-container">
+      <div>
+        <h4>🏗️ TODO METAL SAS</h4>
+        <p>Advanced metallic structures, bridge construction, and heavy industrial montages.</p>
       </div>
-      <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">ISO Certifications</a>
-      </div>
-      <div class="footer-copy">
-        © 2026 TODO METAL SAS. PRECISION ENGINEERING.
+      <div>
+        <h4>Support & PQRS</h4>
+        <p>Engineering & Infrastructure support powered by Multi-Tenant SaaS Platform.</p>
+        <button class="btn btn-outline-light btn-sm" onclick="switchView('pqrs')">Radicar PQRS</button>
       </div>
     </div>
   </footer>
 
-  <!-- PQRS WIDGET INTEGRATION FOR TENANT B -->
-  <script src="/widget/pqrs-widget.js?v=3" data-tenant="pk_live_todometal_67890"></script>
+  <!-- Scripts -->
+  <script src="../demo-data/todometal.js"></script>
+  <script src="../shared/api.js"></script>
+
+  <!-- EMBEDDED WIDGET PQRS -->
+  <script src="/widget/pqrs-widget.js" data-tenant="todo-metal-key-456"></script>
+  <script src="app.js"></script>
+
 </body>
 </html>

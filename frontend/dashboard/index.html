@@ -3,15 +3,257 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Multi-Tenant PQRS SaaS</title>
-  <link rel="stylesheet" href="styles.css?v=5">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- SignalR Client Library from CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+  <title>Dashboard Administrativo SaaS Multi-Tenant | PQRS & RAG</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 </head>
 <body>
-  <div id="app"></div>
-  <script src="app.js?v=5"></script>
+
+  <!-- Top Navbar with Tenant Switcher and Admin Auth -->
+  <header class="dash-header">
+    <div class="dash-container header-row">
+      <div class="dash-brand">
+        <span class="dash-logo">⚡</span>
+        <div>
+          <h2>Panel Administrativo SaaS</h2>
+          <small id="dash-header-subtitle">Gestión Multi-Tenant de PQRS & Base de Conocimientos RAG</small>
+        </div>
+      </div>
+
+      <div class="dash-header-actions" style="display:flex; align-items:center; gap:16px;">
+        <div class="tenant-selector-wrapper" id="tenant-selector-container">
+          <label for="tenant-select">🏢 Tenant Activo:</label>
+          <select id="tenant-select" onchange="changeActiveTenant()">
+            <option value="leggumbres">🥦 Leggumbres La Escoba</option>
+            <option value="todo-metal">🏗️ Estructuras y Montajes Todo Metal SAS</option>
+          </select>
+        </div>
+
+        <div id="admin-auth-header">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content (Hidden until authenticated) -->
+  <main class="dash-container main-layout hidden" id="dash-main-content">
+
+    <!-- KPI Metric Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card card">
+        <span class="kpi-title">Total PQRS</span>
+        <span class="kpi-val" id="kpi-total">0</span>
+      </div>
+      <div class="kpi-card card">
+        <span class="kpi-title">Pendientes</span>
+        <span class="kpi-val text-warning" id="kpi-pending">0</span>
+      </div>
+      <div class="kpi-card card">
+        <span class="kpi-title">En Proceso</span>
+        <span class="kpi-val text-info" id="kpi-progress">0</span>
+      </div>
+      <div class="kpi-card card">
+        <span class="kpi-title">Resueltas</span>
+        <span class="kpi-val text-success" id="kpi-resolved">0</span>
+      </div>
+      <div class="kpi-card card border-danger">
+        <span class="kpi-title">Alta Prioridad</span>
+        <span class="kpi-val text-danger" id="kpi-high">0</span>
+      </div>
+      <div class="kpi-card card border-danger">
+        <span class="kpi-title">Sentimiento Negativo</span>
+        <span class="kpi-val text-danger" id="kpi-negative">0</span>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="dash-tabs">
+      <button class="dash-tab-btn active" onclick="switchDashTab('tickets')">📩 Bandeja de PQRS</button>
+      <button class="dash-tab-btn" onclick="switchDashTab('kb')">📚 Base de Conocimiento (RAG KB)</button>
+    </div>
+
+    <!-- TAB 1: TICKETS INBOX -->
+    <section id="dashtab-tickets" class="dash-tab-content active">
+      <div class="card">
+        <div class="filter-bar">
+          <h3 id="tickets-inbox-title">Bandeja de Entrada de PQRS</h3>
+          <div class="filters-group">
+            <select id="filter-status" onchange="renderTickets()">
+              <option value="ALL">Todos los Estados</option>
+              <option value="PENDING">Pendientes</option>
+              <option value="IN_PROGRESS">En Proceso</option>
+              <option value="RESOLVED">Resueltas</option>
+            </select>
+            <select id="filter-priority" onchange="renderTickets()">
+              <option value="ALL">Todas las Prioridades</option>
+              <option value="HIGH">Alta Prioridad</option>
+              <option value="MEDIUM">Prioridad Media</option>
+              <option value="LOW">Prioridad Baja</option>
+            </select>
+            <select id="filter-sentiment" onchange="renderTickets()">
+              <option value="ALL">Todos los Sentimientos</option>
+              <option value="NEGATIVE">Sentimiento Negativo</option>
+              <option value="NEUTRAL">Sentimiento Neutro</option>
+              <option value="POSITIVE">Sentimiento Positivo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>N° Radicado</th>
+                <th>Solicitante</th>
+                <th>Asunto</th>
+                <th>Tipo</th>
+                <th>Prioridad IA</th>
+                <th>Sentimiento IA</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tickets-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: RAG KNOWLEDGE BASE MANAGER -->
+    <section id="dashtab-kb" class="dash-tab-content">
+      <div class="card">
+        <div class="tab-title-bar">
+          <div>
+            <h3>Gestor de Base de Conocimientos (RAG Knowledge Base)</h3>
+            <p>Los artículos creados y editados aquí alimentan el RAG de la IA en tiempo real.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewKbModal()">+ Crear Nuevo Artículo KB</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Título del Artículo</th>
+                <th>Resumen de Contenido</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="kb-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- Admin Login Mandatory Modal (Visible by default until authenticated) -->
+  <div id="modal-admin-auth" class="modal-backdrop">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h3>🔐 Autenticación Administrador</h3>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom:12px; font-size:0.85rem; color:#64748b;">Selecciona o ingresa la cuenta del tenant que deseas administrar:</p>
+
+        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px;">
+          <button type="button" class="btn btn-outline" style="text-align:left; font-size:0.8rem;" onclick="setLoginPreset('admin@leggumbres.local', 'Password123!')">
+            🥦 Admin Leggumbres La Escoba (<code>admin@leggumbres.local</code>)
+          </button>
+          <button type="button" class="btn btn-outline" style="text-align:left; font-size:0.8rem;" onclick="setLoginPreset('admin@todometal.local', 'Password123!')">
+            🏗️ Admin Todo Metal SAS (<code>admin@todometal.local</code>)
+          </button>
+          <button type="button" class="btn btn-outline" style="text-align:left; font-size:0.8rem;" onclick="setLoginPreset('admin@saas.com', 'Password123!')">
+            ⚡ Super Admin Global SaaS (<code>admin@saas.com</code>)
+          </button>
+        </div>
+
+        <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label>Correo Administrador *</label>
+            <input type="email" id="admin-email" required value="admin@leggumbres.local" placeholder="admin@leggumbres.local">
+          </div>
+          <div class="form-group">
+            <label>Contraseña *</label>
+            <input type="password" id="admin-pass" required value="Password123!" placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">🔐 Ingresar al Panel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket Detail Drawer Modal -->
+  <div id="modal-ticket-detail" class="modal-backdrop hidden" onclick="closeTicketModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="det-radicado">PQRS-0000</h3>
+        <button class="close-btn" onclick="closeTicketModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="det-body">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer" id="det-footer">
+        <!-- Action buttons -->
+      </div>
+    </div>
+  </div>
+
+  <!-- KB Create Modal -->
+  <div id="modal-kb" class="modal-backdrop hidden" onclick="closeKbModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Crear Artículo de Conocimiento KB</h3>
+        <button class="close-btn" onclick="closeKbModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="kb-form" onsubmit="handleKbSubmit(event)">
+          <div class="form-group">
+            <label>Título del Artículo *</label>
+            <input type="text" id="kb-title" required placeholder="Ej: Politica de entregas express">
+          </div>
+          <div class="form-group">
+            <label>Contenido Oficial (Servirá de fuente RAG) *</label>
+            <textarea id="kb-content" rows="6" required placeholder="Escribe la información empresarial autorizada..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">💾 Guardar e Indexar en RAG</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SignalR Critical Alert Banner Modal -->
+  <div id="modal-signalr-alert" class="modal-backdrop hidden">
+    <div class="modal-card alert-modal-card">
+      <div class="alert-header">
+        <span class="alert-icon">⚠️</span>
+        <h3>¡ALERTA CRÍTICA EN TIEMPO REAL!</h3>
+      </div>
+      <div class="alert-body">
+        <p>Se ha registrado una nueva PQRS de <strong>Alta Prioridad / Sentimiento Negativo</strong> en el tenant activo:</p>
+        <div class="radicado-alert-box card">
+          <p><strong>Radicado:</strong> <span id="sig-radicado">PQRS-000</span></p>
+          <p><strong>Asunto:</strong> <span id="sig-subject">...</span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-block" onclick="dismissSignalRAlert()">Atender PQRS Inmediatamente</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../shared/auth.js"></script>
+  <script src="../shared/api.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

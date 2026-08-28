@@ -47,7 +47,14 @@ public class TenantResolutionMiddleware
 
             var tenant = await dbContext.Tenants
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.WidgetPublicKey == widgetKey && t.IsActive);
+                .FirstOrDefaultAsync(t => (
+                    t.WidgetPublicKey == widgetKey ||
+                    t.Slug == widgetKey ||
+                    (widgetKey.Contains("escoba") && t.Slug.Contains("escoba")) ||
+                    (widgetKey.Contains("leggumbres") && t.Slug.Contains("leggumbres")) ||
+                    (widgetKey.Contains("todo-metal") && t.Slug.Contains("metal")) ||
+                    (widgetKey.Contains("todometal") && t.Slug.Contains("metal"))
+                ) && t.IsActive);
 
             if (tenant == null)
             {

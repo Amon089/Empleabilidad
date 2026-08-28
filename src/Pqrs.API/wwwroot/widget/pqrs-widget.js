@@ -29,6 +29,29 @@
 .pqrs-launcher:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5); }
 .pqrs-launcher:focus-visible { outline: 3px solid #60a5fa; outline-offset: 3px; }
 .pqrs-launcher svg { width: 28px; height: 28px; fill: currentColor; }
+
+.pqrs-launcher-ticket {
+  position: fixed;
+  bottom: 24px;
+  right: 94px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pqrs-launcher-ticket:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5); }
+.pqrs-launcher-ticket:focus-visible { outline: 3px solid #34d399; outline-offset: 3px; }
+.pqrs-launcher-ticket svg { width: 26px; height: 26px; fill: currentColor; }
+
 .pqrs-container {
   position: fixed;
   bottom: 96px;
@@ -97,7 +120,10 @@
 .pqrs-dot:nth-child(1) { animation-delay: -0.32s; }
 .pqrs-dot:nth-child(2) { animation-delay: -0.16s; }
 @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
-@media (max-width: 480px) { .pqrs-container { bottom: 12px; right: 12px; left: 12px; width: calc(100vw - 24px); height: calc(100vh - 80px); } }
+@media (max-width: 480px) {
+  .pqrs-container { bottom: 12px; right: 12px; left: 12px; width: calc(100vw - 24px); height: calc(100vh - 80px); }
+  .pqrs-launcher-ticket { right: 84px; }
+}
 `;
 
   class WidgetApiClient {
@@ -167,12 +193,30 @@
     }
 
     renderLauncher() {
-      const btn = document.createElement("button");
-      btn.className = "pqrs-launcher";
-      btn.setAttribute("aria-label", "Abrir asistente de PQRS");
-      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>`;
-      btn.addEventListener("click", () => this.toggleWidget());
-      this.shadow.appendChild(btn);
+      // 1. AI Chatbot Launcher Button (Blue)
+      const aiBtn = document.createElement("button");
+      aiBtn.className = "pqrs-launcher";
+      aiBtn.setAttribute("aria-label", "Consultar Asistente IA");
+      aiBtn.setAttribute("title", "Consultar Asistente IA");
+      aiBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>`;
+      aiBtn.addEventListener("click", () => {
+        this.state.setPhase("chat");
+        this.toggleWidget();
+      });
+
+      // 2. Direct PQRS Form Launcher Button (Green)
+      const ticketBtn = document.createElement("button");
+      ticketBtn.className = "pqrs-launcher-ticket";
+      ticketBtn.setAttribute("aria-label", "Radicar PQRS Formal");
+      ticketBtn.setAttribute("title", "Radicar PQRS Formal");
+      ticketBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>`;
+      ticketBtn.addEventListener("click", () => {
+        this.state.setPhase("ticket-form");
+        if (!this.isOpen) this.toggleWidget();
+      });
+
+      this.shadow.appendChild(aiBtn);
+      this.shadow.appendChild(ticketBtn);
     }
 
     toggleWidget() {
@@ -195,9 +239,9 @@
           <div>
             <div class="pqrs-header-title">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-              Asistente Virtual PQRS
+              Plataforma de Atención y PQRS
             </div>
-            <div class="pqrs-header-subtitle">Respuesta inmediata & Soporte 24/7</div>
+            <div class="pqrs-header-subtitle">Respuesta inmediata por IA & Soporte 24/7</div>
           </div>
           <button class="pqrs-close-btn" aria-label="Cerrar widget">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -245,12 +289,12 @@
           this.state.addMessage("bot", res.answer, res.sources || []);
           this.renderRagFeedback();
         } else {
-          this.state.addMessage("bot", "No encontré una respuesta exacta en nuestra base de conocimientos. ¿Deseas hacer otra pregunta o prefieres radicar una PQRS?");
+          this.state.addMessage("bot", "No encontré una respuesta exacta en nuestra base de conocimientos. ¿Deseas hacer otra pregunta o prefieres radicar una PQRS formal usando el botón verde de radicación?");
           this.renderUnresolvedFeedback();
         }
       } catch (err) {
         this.state.setLoading(false);
-        this.state.addMessage("bot", "Ocurrió un inconveniente temporal. Puedes continuar en el chat o radicar tu PQRS a continuación.");
+        this.state.addMessage("bot", "Ocurrió un inconveniente temporal. Puedes continuar en el chat o hacer clic en el botón de radicar PQRS a continuación.");
         this.renderUnresolvedFeedback();
       }
     }
@@ -314,35 +358,34 @@
 
       body.innerHTML = "";
 
-      this.state.messages.forEach(msg => {
-        const msgDiv = document.createElement("div");
-        msgDiv.className = `pqrs-msg pqrs-msg-${msg.sender}`;
-        msgDiv.innerText = msg.text;
+      if (this.state.phase === "chat") {
+        footer.style.display = "flex";
+        this.state.messages.forEach(msg => {
+          const msgDiv = document.createElement("div");
+          msgDiv.className = `pqrs-msg pqrs-msg-${msg.sender}`;
+          msgDiv.innerText = msg.text;
 
-        if (msg.sources && msg.sources.length > 0) {
-          const sourceSpan = document.createElement("div");
-          sourceSpan.className = "pqrs-source";
-          sourceSpan.innerHTML = `📄 Fuente: ${msg.sources.map(s => s.title).join(", ")}`;
-          msgDiv.appendChild(sourceSpan);
+          if (msg.sources && msg.sources.length > 0) {
+            const sourceSpan = document.createElement("div");
+            sourceSpan.className = "pqrs-source";
+            sourceSpan.innerHTML = `📄 Fuente: ${msg.sources.map(s => s.title).join(", ")}`;
+            msgDiv.appendChild(sourceSpan);
+          }
+          body.appendChild(msgDiv);
+        });
+
+        if (this.state.loading) {
+          const loadingDiv = document.createElement("div");
+          loadingDiv.className = "pqrs-msg pqrs-msg-bot";
+          loadingDiv.innerHTML = `<div class="pqrs-loading-dots"><span class="pqrs-dot"></span><span class="pqrs-dot"></span><span class="pqrs-dot"></span></div>`;
+          body.appendChild(loadingDiv);
         }
-        body.appendChild(msgDiv);
-      });
-
-      if (this.state.loading) {
-        const loadingDiv = document.createElement("div");
-        loadingDiv.className = "pqrs-msg pqrs-msg-bot";
-        loadingDiv.innerHTML = `Buscando información <div class="pqrs-loading-dots"><span class="pqrs-dot"></span><span class="pqrs-dot"></span><span class="pqrs-dot"></span></div>`;
-        body.appendChild(loadingDiv);
-      }
-
-      if (this.state.phase === "ticket-form") {
+      } else if (this.state.phase === "ticket-form") {
         footer.style.display = "none";
         this.renderTicketForm(body);
       } else if (this.state.phase === "success") {
         footer.style.display = "none";
         this.renderSuccessCard(body);
-      } else {
-        footer.style.display = "flex";
       }
 
       body.scrollTop = body.scrollHeight;
@@ -352,7 +395,7 @@
       const formDiv = document.createElement("div");
       formDiv.className = "pqrs-form";
       formDiv.innerHTML = `
-        <div class="pqrs-form-title">Radicar PQRS</div>
+        <div class="pqrs-form-title">📝 Formulario Oficial de PQRS</div>
         <div class="pqrs-field">
           <label class="pqrs-label">Tu Nombre *</label>
           <input type="text" id="tf-name" class="pqrs-input" placeholder="Ej: Juan Pérez">
@@ -375,7 +418,7 @@
         </div>
         <div style="display: flex; gap: 8px; margin-top: 8px;">
           <button type="button" class="pqrs-btn pqrs-btn-primary" id="btn-submit-ticket" style="flex:1;">Enviar PQRS</button>
-          <button type="button" class="pqrs-btn pqrs-btn-secondary" id="btn-cancel-ticket">Volver al Chat</button>
+          <button type="button" class="pqrs-btn pqrs-btn-secondary" id="btn-cancel-ticket">Volver al Chat IA</button>
         </div>
       `;
 

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pqrs.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f366967b4e60580ae308e4b71fce68a313b0fc8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c1de85fa3696ec7f579063f1049c50fc6efaf2b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pqrs.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pqrs.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

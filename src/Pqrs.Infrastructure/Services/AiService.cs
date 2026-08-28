@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -118,13 +119,15 @@ public class AiService : IAiService
                   ?? _configuration["AI:ApiKey"];
         var provider = (_configuration["AI:Provider"] ?? "gemini").ToLowerInvariant();
         var contextText = string.Join("\n\n---\n\n", contextArticles.Select(a => $"Título: {a.Title}\nContenido: {a.Content}"));
-        var prompt = $"Eres el Asistente Virtual Inteligente Oficial de Atención al Cliente y PQRS de la empresa. Tu personalidad es cálida, servicial, conversacional, empática y muy profesional.\n\n" +
-                     $"BASE DE CONOCIMIENTO Y CONTEXTO CORPORATIVO DEL TENANT ACTIVO:\n\n{contextText}\n\n" +
-                     $"MÁRGENES DE ACTUACIÓN Y LIBERTAD CONVERSACIONAL:\n" +
-                     $"1. LIBERTAD Y FLUIDEZ: Tienes libertad para expresarte con naturalidad, responder cordialmente, dar explicaciones fluidas, sugerir ideas o recomendaciones culinarias o constructivas relacionadas con el negocio, y adaptar tu tono al usuario siempre manteniendo respeto y profesionalismo.\n" +
-                     $"2. DELIMITACIÓN DE TENANT: Mantén tus respuestas enmarcadas estrictamente en la actividad de esta empresa. Si te preguntan por servicios de otra industria no relacionada, aclara amablemente la especialización de la empresa y ofrece la opción de radicar una PQRS.\n" +
-                     $"3. VERACIDAD Y LÍMITES TÉCNICOS/FINANCIEROS: No inventes datos específicos inexistentes como números de contratos gubernamentales, nombres de fincas o agricultores individuales, precios exactos no publicados o cálculos de ingeniería estructural definitivos. En proyectos técnicos o cotizaciones complejas, explica amablemente qué datos se requieren e invita a solicitar una cotización formal o radicar una PQRS con un especialista.\n" +
-                     $"4. ATENCIÓN Y PQRS: Si el usuario desea reportar un reclamo, problema con su pedido/obra o hablar con un asesor humano, oriéntalo cordialmente a hacer clic en el botón 'Radicar PQRS'.\n\n" +
+
+        var prompt = $"Eres el Asistente Virtual Oficial de la empresa. Tu función es responder la consulta del cliente utilizando ÚNICAMENTE la base de conocimiento autorizada provista a continuación.\n\n" +
+                     $"BASE DE CONOCIMIENTO AUTORIZADA:\n\n{contextText}\n\n" +
+                     $"INSTRUCCIONES DE FORMATO Y RESPUESTA:\n" +
+                     $"1. Responde de forma amable, cercana, profesional y natural en español.\n" +
+                     $"2. Sintetiza la respuesta directamente al cliente usando viñetas o párrafos breves.\n" +
+                     $"3. NUNCA incluyas identificadores internos como 'P101:', 'R101:', 'P151:', ni títulos de archivos de entrenamiento como 'PREGUNTAS Y RESPUESTAS DE...'.\n" +
+                     $"4. RESPONDE ÚNICAMENTE SI EL CONTEXTO ARRIBA ES SUFICIENTE Y PERTINENTE. Si no existe información suficiente, responde exactamente: 'No encuentro información suficiente para responder esta consulta.'\n" +
+                     $"5. NUNCA inventes precios, horarios, fechas, disponibilidad, contratos o especificaciones no presentes en el contexto.\n\n" +
                      $"Pregunta del usuario: {query}";
 
         if (!string.IsNullOrWhiteSpace(apiKey) && apiKey != "YOUR_OPENAI_OR_GEMINI_API_KEY")
@@ -162,7 +165,7 @@ public class AiService : IAiService
                                 .GetProperty("text")
                                 .GetString();
 
-                            if (!string.IsNullOrWhiteSpace(answer)) return answer.Trim();
+                            if (!string.IsNullOrWhiteSpace(answer)) return CleanFormattedAnswer(answer);
                         }
                     }
                 }
@@ -178,7 +181,7 @@ public class AiService : IAiService
                         {
                             new { role = "user", content = prompt }
                         },
-                        temperature = 0.1
+                        temperature = 0.2
                     };
 
                     using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
@@ -191,7 +194,7 @@ public class AiService : IAiService
                         var jsonStr = await response.Content.ReadAsStringAsync(cancellationToken);
                         using var doc = JsonDocument.Parse(jsonStr);
                         var answer = doc.RootElement.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString();
-                        if (!string.IsNullOrWhiteSpace(answer)) return answer.Trim();
+                        if (!string.IsNullOrWhiteSpace(answer)) return CleanFormattedAnswer(answer);
                     }
                 }
             }
@@ -201,23 +204,68 @@ public class AiService : IAiService
             }
         }
 
-        // Rule-based deterministic RAG Answer synthesis based strictly on context when external LLM is offline or rate-limited
+        // Clean Fallback RAG Answer synthesis when external LLM is offline or rate-limited
         if (contextArticles != null && contextArticles.Any())
         {
-            var bestArticles = contextArticles.Take(2).ToList();
-            var responseBuilder = new StringBuilder();
-            
-            foreach (var art in bestArticles)
-            {
-                responseBuilder.AppendLine($"📌 **{art.Title}**");
-                responseBuilder.AppendLine(art.Content);
-                responseBuilder.AppendLine();
-            }
-
-            return responseBuilder.ToString().Trim();
+            return SynthesizeCleanFallback(query, contextArticles);
         }
 
-        return "No hay información suficiente en la base de conocimientos para responder esta consulta.";
+        return "No puedo procesar esta consulta en este momento. Si necesitas atención, puedes registrar una PQRS.";
+    }
+
+    private string SynthesizeCleanFallback(string query, IEnumerable<KnowledgeBaseArticle> contextArticles)
+    {
+        var topArticle = contextArticles.FirstOrDefault();
+        if (topArticle == null || string.IsNullOrWhiteSpace(topArticle.Content))
+        {
+            return "No encuentro información suficiente para responder esta consulta.";
+        }
+
+        var lines = topArticle.Content.Split('\n');
+        var cleanLines = new List<string>();
+
+        foreach (var line in lines)
+        {
+            var l = line.Trim();
+            if (l.StartsWith("PREGUNTAS Y RESPUESTAS", StringComparison.OrdinalIgnoreCase) ||
+                l.Contains("Q&As):", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            // Extract answers (R1:, R2:, R101:)
+            if (l.StartsWith("R") && Regex.IsMatch(l, @"^R\d+:"))
+            {
+                var cleanAnswerText = Regex.Replace(l, @"^R\d+:\s*", "");
+                cleanLines.Add("• " + cleanAnswerText);
+            }
+            else if (!l.StartsWith("P") || !Regex.IsMatch(l, @"^P\d+:"))
+            {
+                var cleanLineText = Regex.Replace(l, @"^[PR]\d+:\s*", "");
+                if (!string.IsNullOrWhiteSpace(cleanLineText))
+                {
+                    cleanLines.Add(cleanLineText);
+                }
+            }
+        }
+
+        if (cleanLines.Any())
+        {
+            return string.Join("\n", cleanLines.Take(8)).Trim();
+        }
+
+        return topArticle.Content.Trim();
+    }
+
+    private string CleanFormattedAnswer(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+
+        var cleaned = Regex.Replace(text, @"^[PR]\d+:\s*", "", RegexOptions.Multiline);
+        cleaned = Regex.Replace(cleaned, @"^P\d+\s+a\s+P\d+:\s*", "", RegexOptions.Multiline);
+        cleaned = Regex.Replace(cleaned, @"PREGUNTAS Y RESPUESTAS DE.*?\n", "", RegexOptions.IgnoreCase);
+
+        return cleaned.Trim();
     }
 
     public async Task<TriageResultDto> TriageTicketAsync(string subject, string description, CancellationToken cancellationToken = default)
@@ -253,75 +301,72 @@ public class AiService : IAiService
         {
             priority = Priority.HIGH;
         }
-        else if (combinedText.Contains("sugerencia") || combinedText.Contains("informacion") || combinedText.Contains("cotizacion"))
+        else if (combinedText.Contains("sugerencia") || combinedText.Contains("felicitaciones") || combinedText.Contains("consulta"))
         {
             priority = Priority.LOW;
         }
 
         // 3. Determine Sentiment
         Sentiment sentiment = Sentiment.NEUTRAL;
-        if (combinedText.Contains("mal estado") || combinedText.Contains("incompleto") || combinedText.Contains("corrosion") || 
-            combinedText.Contains("inconformidad") || combinedText.Contains("problema") || combinedText.Contains("no recibo") || 
-            combinedText.Contains("cobraron"))
-        {
-            sentiment = Sentiment.NEGATIVE;
-        }
-        else if (combinedText.Contains("excelente") || combinedText.Contains("gracias") || combinedText.Contains("buen"))
+        if (combinedText.Contains("excelente") || combinedText.Contains("felicitaciones") || combinedText.Contains("buen servicio") || combinedText.Contains("gracias"))
         {
             sentiment = Sentiment.POSITIVE;
         }
+        else if (combinedText.Contains("inconform") || combinedText.Contains("pesimo") || combinedText.Contains("mal estado") || combinedText.Contains("retraso") || combinedText.Contains("queja") || combinedText.Contains("danado"))
+        {
+            sentiment = Sentiment.NEGATIVE;
+        }
 
-        // 4. Generate Summary
-        var summary = $"Solicitud sobre '{subject}'. Clasificado como {type} con prioridad {priority}.";
+        var summary = $"Solicitud de tipo {type} clasificada con prioridad {priority} y sentimiento {sentiment}.";
 
         return await Task.FromResult(new TriageResultDto
         {
             Type = type,
             Priority = priority,
             Sentiment = sentiment,
-            Summary = summary,
-            TypeConfidence = 0.95f,
-            PriorityConfidence = 0.92f,
-            SentimentConfidence = 0.94f
+            Summary = summary
         });
     }
 
-    private static float[] GenerateDeterministicEmbedding(string text)
+    private float[] GenerateDeterministicEmbedding(string text)
     {
+        var tokens = text.ToLowerInvariant()
+            .Split(new[] { ' ', '.', ',', ';', ':', '!', '?', '-', '_', '(', ')', '[', ']', '"', '\'', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+            .Where(t => !StopWords.Contains(t) && t.Length > 1)
+            .Distinct()
+            .ToList();
+
         var vector = new float[EmbeddingDimension];
-        if (string.IsNullOrWhiteSpace(text)) return vector;
-
-        var lines = text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        var titleText = lines.Length > 0 ? lines[0] : text;
-
-        var titleWords = titleText.ToLowerInvariant()
-            .Split(new[] { ' ', '\t', ',', '.', ';', ':', '?', '!' }, StringSplitOptions.RemoveEmptyEntries)
-            .Where(w => !StopWords.Contains(w))
-            .Distinct()
-            .ToList();
-
-        var bodyWords = text.ToLowerInvariant()
-            .Split(new[] { ' ', '\t', '\r', '\n', ',', '.', ';', ':', '?', '!' }, StringSplitOptions.RemoveEmptyEntries)
-            .Where(w => !StopWords.Contains(w))
-            .Distinct()
-            .ToList();
-
-        foreach (var word in bodyWords)
+        if (!tokens.Any())
         {
-            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(word));
-            int index = Math.Abs(BitConverter.ToInt32(hash, 0)) % EmbeddingDimension;
-            float weight = titleWords.Contains(word) ? 4.0f : 1.0f;
-            vector[index] = weight;
+            vector[0] = 1.0f;
+            return vector;
         }
 
-        // Normalize vector to unit length
-        double normSq = vector.Sum(v => (double)v * v);
-        float norm = (float)Math.Sqrt(normSq);
+        foreach (var token in tokens)
+        {
+            using var sha256 = SHA256.Create();
+            var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(token));
+
+            for (int i = 0; i < 16; i++)
+            {
+                int index = BitConverter.ToUInt16(hash, i * 2) % EmbeddingDimension;
+                vector[index] += 1.0f;
+            }
+        }
+
+        double norm = 0;
+        for (int i = 0; i < EmbeddingDimension; i++)
+        {
+            norm += vector[i] * vector[i];
+        }
+        norm = Math.Sqrt(norm);
+
         if (norm > 0)
         {
             for (int i = 0; i < EmbeddingDimension; i++)
             {
-                vector[i] /= norm;
+                vector[i] = (float)(vector[i] / norm);
             }
         }
 
