@@ -5,7 +5,8 @@ metadata:
   namespace: pqrs-saas
 spec:
   rules:
-    - http:
+    - host: camilo-pqrs.paxos.jaramc.dev
+      http:
         paths:
           - path: /
             pathType: Prefix
