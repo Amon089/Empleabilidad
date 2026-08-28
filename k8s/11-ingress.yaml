@@ -5,43 +5,6 @@ metadata:
   namespace: pqrs-saas
 spec:
   rules:
-    # 1. Subdominio Exclusivo Leggumbres La Escoba
-    - host: legumbres.camilo-pqrs.paxos.jaramc.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pqrs-api-service
-                port:
-                  number: 80
-
-    # 2. Subdominio Exclusivo Estructuras Todo Metal SAS
-    - host: todometal.camilo-pqrs.paxos.jaramc.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pqrs-api-service
-                port:
-                  number: 80
-
-    # 3. Subdominio Exclusivo Dashboard de Administración Multi-Tenant
-    - host: dashboard.camilo-pqrs.paxos.jaramc.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pqrs-api-service
-                port:
-                  number: 80
-
-    # 4. Dominio Principal API / Swagger
     - host: camilo-pqrs.paxos.jaramc.dev
       http:
         paths:
