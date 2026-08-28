@@ -17,9 +17,8 @@ spec:
     spec:
       containers:
         - name: api
-          # 🐳 REEMPLAZAR EN EL SERVIDOR: Cambia 'tu-usuario-docker' por tu usuario de Docker Hub / ECR
-          image: tu-usuario-docker/pqrs-saas-api:latest
-          imagePullPolicy: Always
+          image: pqrs-saas-api:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
               name: http
