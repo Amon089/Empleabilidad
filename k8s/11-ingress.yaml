@@ -3,16 +3,9 @@ kind: Ingress
 metadata:
   name: pqrs-ingress
   namespace: pqrs-saas
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/websocket-services: "pqrs-api-service"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-    - host: pqrs.local
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
