@@ -151,6 +151,23 @@ public class RagService
             };
         }
 
+        // Catalog / Products / What do you sell intent
+        if (cleanQuery.Contains("vendes") || cleanQuery.Contains("venden") || cleanQuery.Contains("ofrecen") || cleanQuery.Contains("productos") || cleanQuery.Contains("servicios") || cleanQuery.Contains("catalogo") || cleanQuery.Contains("catálogo") || cleanQuery.Contains("que tienen") || cleanQuery.Contains("qué tienen") || cleanQuery.Contains("que cosas") || cleanQuery.Contains("qué cosas"))
+        {
+            var isTodoMetal = articles.Any(a => a.Content.Contains("Todo Metal"));
+            var catalogText = isTodoMetal
+                ? "🏗️ En Estructuras y Montajes Todo Metal SAS nos especializamos en: Diseño, fabricación y montaje de estructuras metálicas, puentes vehiculares y peatonales, naves industriales, bodegas, cubiertas, obras de infraestructura y soluciones de construcción sismorresistente NSR-10."
+                : "🥦 En Leggumbres La Escoba vendemos productos agrícolas frescos directamente del campo a tu hogar: Papa, Yuca, Plátano (verde, pintón, maduro), Tomate (chonto y milano), Cebolla (cabezona y junca), Zanahoria, Fríjol, Lentejas, Arvejas, Maíz, Habichuela, Lechuga, Espinaca, Ajo, Aguacate (Hass y papelillo), Frutas frescas (fresa, papaya, piña oro miel, mango, maracuyá, lulo, granadilla, limón Tahití) y productos de temporada.";
+
+            return new RagSearchResponseDto
+            {
+                Resolved = true,
+                Answer = catalogText,
+                Sources = new List<RagSourceDto>(),
+                TopScore = 1.0
+            };
+        }
+
         // 4. Fallback Hybrid Scoring when LLM indicates question is out of KB scope
         var stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "que", "cuanto", "cuando", "donde", "dónde", "como", "cómo", "quien", "quién", "los", "las", "del", "por", "para", "con", "sin", "mas", "más", "se", "un", "una", "de" };
         var queryWords = query.ToLowerInvariant()
@@ -194,7 +211,7 @@ public class RagService
             keywordScore = (double)matchedCount / queryWords.Count;
             double hybridScore = Math.Max(vecScore, keywordScore * 0.9);
 
-            if (hybridScore >= 0.28)
+            if (hybridScore >= 0.15)
             {
                 scoredArticles.Add((article, hybridScore));
             }
@@ -203,7 +220,7 @@ public class RagService
         scoredArticles = scoredArticles.OrderByDescending(x => x.Score).Take(topK).ToList();
         var topMatch = scoredArticles.FirstOrDefault();
 
-        if (topMatch.Article == null || topMatch.Score < 0.28)
+        if (topMatch.Article == null || topMatch.Score < 0.15)
         {
             await LogInteractionAsync(tenantId, sessionId, query, topMatch.Score, false, cancellationToken);
             return new RagSearchResponseDto

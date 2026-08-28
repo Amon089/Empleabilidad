@@ -136,36 +136,24 @@ public static class DbInitializer
         var articlesDataA = new List<(string Title, string Content)>
         {
             (
-                "Cómo realizar un pedido y canales de atención",
-                "Puedes realizar tus pedidos de frutas y verduras frescas directamente a través de nuestro sitio web oficial. Nuestro centro de acopio recibe los productos directamente de los campesinos locales, los clasifica, pesa y empaca en empaques biodegradables para entrega a domicilio."
+                "informacion_empresa",
+                "Leggumbres La Escoba es una empresa dedicada a conectar directamente a los campesinos productores con los hogares de los consumidores. Funciona como centro de acopio y distribución de productos agrícolas. El objetivo principal es reducir intermediarios y facilitar que los productos cultivados por campesinos lleguen frescos y directamente a las familias."
             ),
             (
-                "Zonas de cobertura, envíos y horarios de entrega",
-                "Realizamos entregas a domicilio en toda la Ciudad Principal y Municipios aledaños. Entregamos de lunes a sábado entre las 6:00 AM y las 2:00 PM. Los pedidos realizados antes de las 5:00 PM se entregan a primera hora del día siguiente."
+                "productos",
+                "Comercializamos productos agrícolas frescos de campesinos y proveedores asociados: Papa, Yuca, Plátano (verde, pintón, maduro), Tomate (chonto y milano), Cebolla (cabezona blanca/roja y junca/rama), Zanahoria, Fríjol, Lentejas, Arvejas, Maíz, Habichuela, Lechuga, Espinaca, Ajo, Aguacate (Hass y papelillo), Frutas (fresa, papaya, piña oro miel, mango, maracuyá, lulo, granadilla, limón Tahití) y productos de temporada. La disponibilidad cambia según la producción campesina y existencias en el centro de acopio."
             ),
             (
-                "Garantía de frescura, cambios y devoluciones",
-                "Garantizamos el 100% de la frescura de nuestros productos del campo. Si algún producto llega en mal estado, magullado o incompleto, puedes solicitar el cambio sin costo adicional o reembolso enviando una foto dentro de las 24 horas siguientes a la entrega a través del chat o sistema PQRS."
+                "pedidos_y_entregas",
+                "Los clientes pueden consultar la disponibilidad y realizar pedidos a domicilio directamente desde el sitio web oficial. El centro de acopio prepara los productos frescos para su distribución. Tiempos y horarios: atención y despachos de lunes a sábado de 6:00 AM a 2:00 PM. Opción de 'Recogida en Centro de Acopio' en Bodega 12 de la Zona Agroindustrial Central sin costo de envío de 8:00 AM a 4:00 PM."
             ),
             (
-                "Catálogo de productos frescos y ofertas de temporada",
-                "Contamos con oferta permanente y de temporada: Papa sabanera, Papa criolla, Yuca, Plátano verde y maduro, Fríjol cargamanto, Lentejas, Arveja, Tomate chonto, Cebolla cabezona y larga, Zanahoria, Aguacate hass, Mango, Papaya, Naranja y Limón tahití."
+                "pqrs",
+                "El sistema de PQRS está disponible para presentar solicitudes, quejas, reclamos o felicitaciones. Casos aplicables: producto recibido en mal estado o magullado, producto faltante en un pedido, entrega incorrecta, retraso en el domicilio, solicitudes de información comercial o felicitaciones al equipo."
             ),
             (
-                "Medios de pago aceptados",
-                "Aceptamos pago en efectivo contra entrega, transferencias electrónicas a través de Nequi, Daviplata, Bancolombia, así como tarjetas de crédito y débito mediante nuestra pasarela de pagos segura en el sitio web."
-            ),
-            (
-                "Horarios de atención y días de servicio",
-                "Ofrecemos atención al cliente y servicio de entregas a domicilio de lunes a sábado de 6:00 AM a 2:00 PM. ¿Qué días tienen servicio o atención? Atendemos y realizamos despachos de lunes a sábado."
-            ),
-            (
-                "Ubicación de oficinas, sede principal y dirección de acopio",
-                "¿Dónde está la oficina o bodega de Leggumbres La Escoba? Nuestra sede principal, oficinas de atención y centro de acopio están ubicados en la Zona Agroindustrial Central (Bodega 12). Realizamos envíos a domicilio en toda la Ciudad Principal y municipios aledaños."
-            ),
-            (
-                "Recogida en centro de acopio, retiro en punto físico y bodega",
-                "¿Puedo ir por mi pedido o recogerlo en la central/bodega? ¡Sí, claro! Puedes realizar tu pedido a través de nuestro sitio web seleccionando la opción 'Recogida en Centro de Acopio' y pasar a retirarlo personalmente en nuestra bodega de la Zona Agroindustrial Central (Bodega 12) de lunes a sábado entre las 8:00 AM y las 4:00 PM sin ningún costo de envío."
+                "preguntas_frecuentes_y_reglas",
+                "Instrucciones operativas: El chatbot responde exclusivamente con información de Leggumbres La Escoba. Nunca inventa precios, horarios no registrados, nombres de productores o fincas, ni fechas de entrega individuales. Si la información no está en la base de conocimientos, se debe declarar la falta de información y ofrecer radicar una PQRS."
             )
         };
 
@@ -195,38 +183,40 @@ public static class DbInitializer
         var articlesDataB = new List<(string Title, string Content)>
         {
             (
-                "Servicios de estructuras metálicas e infraestructura",
-                "Estructuras y Montajes Todo Metal SAS se especializa en diseño, cálculo estructural, fabricación, montaje y mantenimiento preventivo y correctivo de estructuras de acero, puentes vehiculares y peatonales, cubiertas industriales y naves comerciales para alcaldías, gobernaciones y sector privado."
+                "informacion_empresa",
+                "Estructuras y Montajes Todo Metal SAS es una empresa dedicada al diseño, fabricación, montaje y ejecución de proyectos de estructuras metálicas y obras de infraestructura pública y privada, incluyendo contratos con entidades gubernamentales y gobernaciones."
             ),
             (
-                "Solicitud de cotizaciones, planos y visitas técnicas",
-                "Para solicitar una cotización o visita técnica en sitio, debes adjuntar los planos de arquitectura e ingeniería e incluir el pliego de condiciones enviándolo al correo proyectos@todometal.local o radicando una solicitud en nuestro portal. Un ingeniero especialista programará la visita técnica en un plazo máximo de 48 horas hábiles."
+                "servicios",
+                "Desarrollamos proyectos de: fabricación y montaje de estructuras metálicas, puentes vehiculares y peatonales, cubiertas industriales, naves comerciales, bodegas, centros logísticos, obras de infraestructura y soluciones estructurales a medida según los requerimientos técnicos del cliente."
             ),
             (
-                "Garantía legal y protocolo postventa estructural",
-                "Todas nuestras obras y estructuras cuentan con una garantía legal de 10 años en elementos estructurales principales y 5 años en pintura anticorrosiva y uniones soldadas según la norma NSR-10. Ante cualquier novedad de corrosión, fisura o desajuste de pernos, enviamos una cuadrilla de inspección prioritaria en menos de 24 horas."
+                "estructuras_y_puentes",
+                "Participamos en proyectos que requieren estructuras metálicas fabricadas en taller, diseño, transporte y montaje en sitio. Cumplimos con la norma sismorresistente NSR-10 y soldadura AWS D1.1. Los proyectos de puentes e infraestructura requieren análisis de ubicación, cargas, terreno y pliegos contractuales. No entregamos cálculos estructurales definitivos por chat."
             ),
             (
-                "Certificaciones de calidad, normas NSR-10 y AWS D1.1",
-                "Cumplimos rigurosamente con el Reglamento Colombiano de Construcción Sismo Resistente NSR-10 y la norma internacional AWS D1.1 de soldadura en estructuras de acero. Todo nuestro personal de soldadores cuenta con certificación vigente y realizamos Ensayos No Destructivos (END) por Ultrasonido y Tintas Penetrantes."
+                "proyectos_publicos_y_cotizaciones",
+                "Participamos en licitaciones y contratos públicos con gobernaciones y alcaldías. Cada contrato tiene alcances y fechas específicas. Cotizaciones: Dependen del tipo de estructura, dimensiones, tipo de acero, volumen, ubicación del proyecto, transporte y montaje. Sin estos datos no se entrega un precio oficial por chat."
             ),
             (
-                "Formas de pago y condiciones comerciales de proyectos",
-                "Trabajamos bajo esquemas de contratación por avance de obra: 50% de anticipo al firmar contrato para adquisición de perfiles de acero, 40% según actas parciales de avance de fabricación y montaje, y 10% restante a la firma del acta de recibo final a satisfacción."
-            ),
-            (
-                "Horarios de atención, días de servicio y canales de atención",
-                "Prestamos servicio de atención comercial, técnica e ingenieril de lunes a viernes de 7:00 AM a 5:00 PM y sábados de 8:00 AM a 12:00 PM. ¿Qué días tienen servicio o atención? Ofrecemos servicio de lunes a sábado. Puedes realizar tus solicitudes a través del portal de atención o escribiendo a proyectos@todometal.local."
-            ),
-            (
-                "Ubicación de oficinas, sede principal y planta industrial",
-                "¿Dónde está la oficina o sede de Estructuras y Montajes Todo Metal SAS? Nuestra sede principal, oficinas administrativas y planta de producción están ubicadas en el Parque Industrial Metalmecánico (Manzana B, Lote 4). Atendemos de lunes a viernes de 7:00 AM a 5:00 PM y sábados de 8:00 AM a 12:00 PM."
-            ),
-            (
-                "Retiro de materiales, perfiles y recogida en planta industrial",
-                "¿Puedo ir por materiales o recoger elementos en la planta? Sí, contratistas y clientes pueden enviar vehículos autorizados para retirar elementos fabricados, perfiles de acero o estructuras en nuestra planta industrial de lunes a viernes de 7:00 AM a 4:00 PM presentando la orden de despacho o contrato firmado."
+                "pqrs_y_reglas",
+                "Sistema de PQRS para Todo Metal SAS: Los clientes y contratistas pueden radicar PQRS por retrasos en proyectos, solicitudes de información contractual o técnica, problemas de montaje o entregas, quejas o felicitaciones. Reglas: Responder únicamente sobre Todo Metal SAS, nunca inventar contratos, valores, dimensiones, cargas o normas no registradas, y ofrecer radicar una PQRS si la consulta requiere revisión de un ingeniero o empleado."
             )
         };
+
+        foreach (var data in articlesDataB)
+        {
+            var emb = await aiService.GenerateEmbeddingAsync($"{data.Title}\n{data.Content}");
+            context.KnowledgeBaseArticles.Add(new KnowledgeBaseArticle
+            {
+                Id = Guid.NewGuid(),
+                TenantId = tenantB.Id,
+                Title = data.Title,
+                Content = data.Content,
+                Embedding = new Vector(emb),
+                IsActive = true
+            });
+        }
 
         foreach (var data in articlesDataB)
         {

@@ -29,10 +29,12 @@ services:
       - Jwt__Secret=SuperSecretKey_For_PQRS_SaaS_Platform_1234567890!
       - Jwt__Issuer=PqrsApi
       - Jwt__Audience=PqrsWidget
-      - AI__ApiKey=
-      - AI__ChatModel=gpt-4o-mini
-      - AI__EmbeddingModel=text-embedding-3-small
-      - Rag__SimilarityThreshold=0.78
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-YOUR_GEMINI_API_KEY}
+      - AI__Provider=gemini
+      - AI__ApiKey=${GEMINI_API_KEY:-YOUR_GEMINI_API_KEY}
+      - AI__ChatModel=gemini-1.5-flash
+      - AI__EmbeddingModel=text-embedding-004
+      - Rag__SimilarityThreshold=0.35
       - Rag__TopK=5
     depends_on:
       postgres:

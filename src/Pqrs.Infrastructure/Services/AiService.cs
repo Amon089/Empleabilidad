@@ -118,14 +118,13 @@ public class AiService : IAiService
                   ?? _configuration["AI:ApiKey"];
         var provider = (_configuration["AI:Provider"] ?? "gemini").ToLowerInvariant();
         var contextText = string.Join("\n\n---\n\n", contextArticles.Select(a => $"Título: {a.Title}\nContenido: {a.Content}"));
-        var prompt = $"Eres el Asistente Virtual Oficial de Atención al Cliente y PQRS. Tu trato es siempre muy amable, empático, profesional y respetuoso.\n\n" +
-                     $"INFORMACIÓN OFICIAL DE LA EMPRESA (BASE DE CONOCIMIENTOS):\n\n{contextText}\n\n" +
-                     $"INSTRUCCIONES DE RESPUESTA:\n" +
-                     $"- Si el usuario saluda o hace preguntas de cortesía (hola, buenos días, cómo estás), responde amablemente e indícale en qué puedes ayudarle.\n" +
-                     $"- Si el usuario pregunta tu identidad (quién eres, si eres robot, qué haces), explícale amablemente que eres el Asistente Virtual Inteligente de PQRS 24/7 de la empresa.\n" +
-                     $"- Si el usuario pide hablar con un agente humano, persona real, supervisor o radicar una queja, indícale amablemente que puede hacer clic en 'Radicar PQRS' para conectarlo con un asesor humano.\n" +
-                     $"- Para preguntas sobre compras, envíos, horarios, pagos, productos, garantías, cotizaciones o servicios, responde utilizando la información oficial provista arriba.\n" +
-                     $"- Si la pregunta es sobre una política o dato no mencionado en la base de conocimientos, responde amablemente indicando que no posees ese dato específico e invítale a radicar una PQRS.\n\n" +
+        var prompt = $"Eres el Asistente Virtual Inteligente Oficial de Atención al Cliente y PQRS de la empresa. Tu personalidad es cálida, servicial, conversacional, empática y muy profesional.\n\n" +
+                     $"BASE DE CONOCIMIENTO Y CONTEXTO CORPORATIVO DEL TENANT ACTIVO:\n\n{contextText}\n\n" +
+                     $"MÁRGENES DE ACTUACIÓN Y LIBERTAD CONVERSACIONAL:\n" +
+                     $"1. LIBERTAD Y FLUIDEZ: Tienes libertad para expresarte con naturalidad, responder cordialmente, dar explicaciones fluidas, sugerir ideas o recomendaciones culinarias o constructivas relacionadas con el negocio, y adaptar tu tono al usuario siempre manteniendo respeto y profesionalismo.\n" +
+                     $"2. DELIMITACIÓN DE TENANT: Mantén tus respuestas enmarcadas estrictamente en la actividad de esta empresa. Si te preguntan por servicios de otra industria no relacionada, aclara amablemente la especialización de la empresa y ofrece la opción de radicar una PQRS.\n" +
+                     $"3. VERACIDAD Y LÍMITES TÉCNICOS/FINANCIEROS: No inventes datos específicos inexistentes como números de contratos gubernamentales, nombres de fincas o agricultores individuales, precios exactos no publicados o cálculos de ingeniería estructural definitivos. En proyectos técnicos o cotizaciones complejas, explica amablemente qué datos se requieren e invita a solicitar una cotización formal o radicar una PQRS con un especialista.\n" +
+                     $"4. ATENCIÓN Y PQRS: Si el usuario desea reportar un reclamo, problema con su pedido/obra o hablar con un asesor humano, oriéntalo cordialmente a hacer clic en el botón 'Radicar PQRS'.\n\n" +
                      $"Pregunta del usuario: {query}";
 
         if (!string.IsNullOrWhiteSpace(apiKey) && apiKey != "YOUR_OPENAI_OR_GEMINI_API_KEY")
@@ -202,7 +201,22 @@ public class AiService : IAiService
             }
         }
 
-        // Rule-based deterministic RAG Answer synthesis based strictly on context
+        // Rule-based deterministic RAG Answer synthesis based strictly on context when external LLM is offline or rate-limited
+        if (contextArticles != null && contextArticles.Any())
+        {
+            var bestArticles = contextArticles.Take(2).ToList();
+            var responseBuilder = new StringBuilder();
+            
+            foreach (var art in bestArticles)
+            {
+                responseBuilder.AppendLine($"📌 **{art.Title}**");
+                responseBuilder.AppendLine(art.Content);
+                responseBuilder.AppendLine();
+            }
+
+            return responseBuilder.ToString().Trim();
+        }
+
         return "No hay información suficiente en la base de conocimientos para responder esta consulta.";
     }
 

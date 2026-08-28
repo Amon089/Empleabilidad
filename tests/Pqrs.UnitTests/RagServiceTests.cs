@@ -91,4 +91,70 @@ public class RagServiceTests
         Assert.NotNull(result.Answer);
         Assert.NotEmpty(result.Sources);
     }
+
+    [Fact]
+    public async Task SearchAndAnswerAsync_TenantA_Questions_ReturnsResolvedTrue()
+    {
+        var tenantId = Guid.NewGuid();
+        var tenantContext = new TenantContext();
+        tenantContext.SetTenantId(tenantId);
+
+        using var dbContext = GetInMemoryDbContext(Guid.NewGuid().ToString(), tenantContext);
+        var httpClient = new System.Net.Http.HttpClient();
+        var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build();
+        var aiService = new AiService(config, httpClient);
+
+        dbContext.KnowledgeBaseArticles.Add(new KnowledgeBaseArticle
+        {
+            Id = Guid.NewGuid(),
+            TenantId = tenantId,
+            Title = "productos",
+            Content = "Comercializamos productos agrícolas frescos: Papa, Yuca, Plátano, Tomate, Cebolla, Zanahoria, Fríjol, Lentejas, Arvejas, Maíz, Habichuela, Lechuga, Espinaca, Ajo, Aguacate (Hass y papelillo), Frutas y de temporada.",
+            IsActive = true
+        });
+        await dbContext.SaveChangesAsync();
+
+        var ragService = new RagService(dbContext, aiService);
+
+        var r1 = await ragService.SearchAndAnswerAsync("que cosas vendes", tenantId, threshold: 0.15);
+        Assert.True(r1.Resolved);
+        Assert.NotNull(r1.Answer);
+
+        var r2 = await ragService.SearchAndAnswerAsync("tienen yuca o papa hoy?", tenantId, threshold: 0.15);
+        Assert.True(r2.Resolved);
+        Assert.NotNull(r2.Answer);
+    }
+
+    [Fact]
+    public async Task SearchAndAnswerAsync_TenantB_Questions_ReturnsResolvedTrue()
+    {
+        var tenantId = Guid.NewGuid();
+        var tenantContext = new TenantContext();
+        tenantContext.SetTenantId(tenantId);
+
+        using var dbContext = GetInMemoryDbContext(Guid.NewGuid().ToString(), tenantContext);
+        var httpClient = new System.Net.Http.HttpClient();
+        var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build();
+        var aiService = new AiService(config, httpClient);
+
+        dbContext.KnowledgeBaseArticles.Add(new KnowledgeBaseArticle
+        {
+            Id = Guid.NewGuid(),
+            TenantId = tenantId,
+            Title = "estructuras_y_puentes",
+            Content = "Ejecutamos construcción de puentes vehiculares y peatonales, naves industriales, bodegas y estructuras metálicas sismorresistentes NSR-10 y AWS D1.1.",
+            IsActive = true
+        });
+        await dbContext.SaveChangesAsync();
+
+        var ragService = new RagService(dbContext, aiService);
+
+        var r1 = await ragService.SearchAndAnswerAsync("hacen puentes vehiculares?", tenantId, threshold: 0.15);
+        Assert.True(r1.Resolved);
+        Assert.NotNull(r1.Answer);
+
+        var r2 = await ragService.SearchAndAnswerAsync("que servicios de construccion ofrecen?", tenantId, threshold: 0.15);
+        Assert.True(r2.Resolved);
+        Assert.NotNull(r2.Answer);
+    }
 }
