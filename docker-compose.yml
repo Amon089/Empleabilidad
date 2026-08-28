@@ -32,7 +32,7 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY:-YOUR_GEMINI_API_KEY}
       - AI__Provider=gemini
       - AI__ApiKey=${GEMINI_API_KEY:-YOUR_GEMINI_API_KEY}
-      - AI__ChatModel=gemini-1.5-flash
+      - AI__ChatModel=gemini-3.5-flash
       - AI__EmbeddingModel=text-embedding-004
       - Rag__SimilarityThreshold=0.35
       - Rag__TopK=5

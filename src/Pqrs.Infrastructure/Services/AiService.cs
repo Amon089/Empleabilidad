@@ -133,7 +133,7 @@ public class AiService : IAiService
             {
                 if (provider == "gemini")
                 {
-                    var modelCandidates = new[] { _configuration["AI:ChatModel"] ?? "gemini-1.5-flash", "gemini-1.5-flash", "gemini-2.0-flash" }.Distinct();
+                    var modelCandidates = new[] { _configuration["AI:ChatModel"] ?? "gemini-3.5-flash", "gemini-3.5-flash", "gemini-flash-latest", "gemini-2.5-flash" }.Distinct();
 
                     foreach (var model in modelCandidates)
                     {
